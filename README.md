@@ -1,8 +1,8 @@
-# StatusApp
+# StatusBar
 
 A lightweight macOS menu bar app that monitors cloud service status pages at a glance.
 
-StatusApp polls [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) APIs and [incident.io](https://incident.io) RSS feeds, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details.
+StatusBar polls [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) APIs and [incident.io](https://incident.io) RSS feeds, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details.
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue) ![Swift](https://img.shields.io/badge/Swift-5.9-orange) ![No Dependencies](https://img.shields.io/badge/dependencies-none-green)
 
@@ -34,8 +34,8 @@ StatusApp polls [Atlassian StatusPage](https://www.atlassian.com/software/status
 
 ```bash
 git clone <repo-url>
-cd StatusApp
-open StatusApp.xcodeproj
+cd StatusBar
+open StatusBar.xcodeproj
 ```
 
 Press **Cmd+R** in Xcode to build and run.
@@ -43,7 +43,7 @@ Press **Cmd+R** in Xcode to build and run.
 ### Building from the command line
 
 ```bash
-xcodebuild -scheme StatusApp -destination 'platform=macOS' build
+xcodebuild -scheme StatusBar -destination 'platform=macOS' build
 ```
 
 ## Usage
@@ -85,9 +85,9 @@ Services using incident.io status pages expose an RSS feed. To verify, check tha
 ## Project Structure
 
 ```
-StatusApp/
+StatusBar/
   App/
-    StatusAppApp.swift              — Entry point, MenuBarExtra + Settings scenes
+    StatusBarApp.swift              — Entry point, MenuBarExtra + Settings scenes
   Models/
     StatusPageModels.swift          — Codable structs for StatusPage API v2
     ServiceConfiguration.swift      — Service config, provider enum + defaults

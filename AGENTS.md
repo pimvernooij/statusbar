@@ -1,8 +1,8 @@
-# AGENTS.md - StatusApp Development Guide
+# AGENTS.md - StatusBar Development Guide
 
 ## Project Overview
 
-StatusApp is a macOS menu bar application (status bar app) that monitors cloud service status pages using the Atlassian StatusPage API v2. Built with SwiftUI, targeting macOS 14+ (Sonoma).
+StatusBar is a macOS menu bar application (status bar app) that monitors cloud service status pages using the Atlassian StatusPage API v2. Built with SwiftUI, targeting macOS 14+ (Sonoma).
 
 ## Architecture
 
@@ -74,7 +74,7 @@ The app consumes the Atlassian StatusPage API. Key details:
 
 ### Testing & Verification
 
-- Build with `xcodebuild -scheme StatusApp -destination 'platform=macOS'`
+- Build with `xcodebuild -scheme StatusBar -destination 'platform=macOS'`
 - Verify menu bar icon appears and reflects correct status
 - Test with live APIs: status.claude.com, www.githubstatus.com
 - Verify Settings window opens and persists changes

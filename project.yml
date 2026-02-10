@@ -1,24 +1,24 @@
-name: StatusApp
+name: StatusBar
 options:
-  bundleIdPrefix: com.statusapp
+  bundleIdPrefix: com.statusbar
   deploymentTarget:
     macOS: "14.0"
   xcodeVersion: "16.0"
   createIntermediateGroups: true
 
 targets:
-  StatusApp:
+  StatusBar:
     type: application
     platform: macOS
     sources:
-      - path: StatusApp
+      - path: StatusBar
         excludes:
           - "**/.DS_Store"
     settings:
       base:
-        CODE_SIGN_ENTITLEMENTS: StatusApp/StatusApp.entitlements
-        PRODUCT_BUNDLE_IDENTIFIER: com.statusapp.StatusApp
-        PRODUCT_NAME: StatusApp
+        CODE_SIGN_ENTITLEMENTS: StatusBar/StatusBar.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.statusapp.StatusBar
+        PRODUCT_NAME: StatusBar
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         SWIFT_VERSION: "5.9"
@@ -28,6 +28,6 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
         ENABLE_PREVIEWS: YES
     info:
-      path: StatusApp/Info.plist
+      path: StatusBar/Info.plist
       properties:
         LSUIElement: true

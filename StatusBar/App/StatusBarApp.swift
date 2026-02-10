@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct StatusAppApp: App {
+struct StatusBarApp: App {
     @State private var pollingService = StatusPollingService()
 
     var body: some Scene {
