@@ -2,14 +2,14 @@
 
 A lightweight macOS menu bar app that monitors cloud service status pages at a glance.
 
-StatusBar polls [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) APIs and [incident.io](https://incident.io) RSS feeds, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details.
+StatusBar polls [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) and [incident.io](https://incident.io) JSON APIs, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details.
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue) ![Swift](https://img.shields.io/badge/Swift-5.9-orange) ![No Dependencies](https://img.shields.io/badge/dependencies-none-green)
 
 ## Features
 
 - **Menu bar icon** that changes color based on overall status (green/yellow/orange/red/gray)
-- **Two provider types** — Atlassian StatusPage (JSON API) and incident.io (RSS feed)
+- **Two provider types** — Atlassian StatusPage and incident.io (both JSON APIs)
 - **Expandable service rows** with component-level breakdown
 - **Quick links** to open status pages in your browser
 - **Configurable polling interval** (30s to 10 minutes)
@@ -64,7 +64,7 @@ Any service using the Atlassian StatusPage API works (Vercel, Cloudflare, Datado
 
 ### incident.io services
 
-Services using incident.io status pages expose an RSS feed. To verify, check that `https://<domain>/feed.rss` returns XML.
+Services using incident.io status pages expose a JSON API. To verify, check that `https://<domain>/proxy/<domain>` returns JSON.
 
 ### Adding a service
 
@@ -78,7 +78,6 @@ Services using incident.io status pages expose an RSS feed. To verify, check tha
 - **SwiftUI** with `MenuBarExtra` (`.window` style for rich rendering)
 - **Swift Observation** (`@Observable`) for reactive state
 - **Actor-based** API client for thread-safe networking
-- **XMLParser** for RSS feed parsing (incident.io provider)
 - **Structured concurrency** — `TaskGroup` for parallel fetching, `Task.sleep` for polling
 - **NSVisualEffectView** for translucent settings window
 - **SMAppService** for launch-at-login support
@@ -91,11 +90,11 @@ StatusBar/
   App/
     StatusBarApp.swift              — Entry point, MenuBarExtra + Settings scenes + AppDelegate
   Models/
-    StatusPageModels.swift          — Codable structs for StatusPage API v2
+    StatusPageModels.swift          — Codable structs for StatusPage + incident.io APIs
     ServiceConfiguration.swift      — Service config, provider enum + defaults
     ServiceStatus.swift             — Status enums + result types
   Services/
-    StatusPageClient.swift          — Actor-based async API client (JSON + RSS)
+    StatusPageClient.swift          — Actor-based async API client (StatusPage + incident.io)
     StatusPollingService.swift      — Observable polling coordinator
   Views/
     StatusMenuView.swift            — Main dropdown content
