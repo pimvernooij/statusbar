@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import ServiceManagement
 
 // MARK: - Translucent Background
 
@@ -25,6 +26,7 @@ struct SettingsView: View {
     @State private var newServiceName = ""
     @State private var newServiceDomain = ""
     @State private var newServiceProvider: ServiceProvider = .statusPage
+    @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     private let intervalOptions: [(label: String, value: TimeInterval)] = [
         ("30 seconds", 30),
@@ -67,7 +69,11 @@ struct SettingsView: View {
         .frame(width: 500, height: 400)
         .background(VisualEffectBackground())
         .onAppear {
-            NSApplication.shared.activate(ignoringOtherApps: true)
+            // Dismiss the MenuBarExtra panel so it releases focus
+            for window in NSApp.windows where window is NSPanel {
+                window.close()
+            }
+            NSApp.activate(ignoringOtherApps: true)
         }
     }
 
@@ -225,7 +231,45 @@ struct SettingsView: View {
             }
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
+            Text("Startup")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
+
+            Button {
+                toggleLaunchAtLogin()
+            } label: {
+                HStack {
+                    Text("Launch at Login")
+                        .font(.body)
+                    Spacer()
+                    if launchAtLogin {
+                        Image(systemName: "checkmark")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(.green)
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(overlay.opacity(launchAtLogin ? 0.08 : 0.04))
+            }
+            .buttonStyle(.plain)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+
             Spacer()
+        }
+    }
+
+    private func toggleLaunchAtLogin() {
+        do {
+            if launchAtLogin {
+                try SMAppService.mainApp.unregister()
+            } else {
+                try SMAppService.mainApp.register()
+            }
+            launchAtLogin = SMAppService.mainApp.status == .enabled
+        } catch {
+            print("Failed to toggle launch at login: \(error)")
         }
     }
 

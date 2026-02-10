@@ -14,6 +14,7 @@ StatusBar polls [Atlassian StatusPage](https://www.atlassian.com/software/status
 - **Quick links** to open status pages in your browser
 - **Configurable polling interval** (30s to 10 minutes)
 - **Add any StatusPage or incident.io service** via Settings
+- **Launch at Login** — optional, toggle in Settings
 - **Translucent settings panel** with vibrancy background, adapts to light/dark mode
 - **Zero dependencies** — built entirely with system frameworks
 
@@ -80,6 +81,7 @@ Services using incident.io status pages expose an RSS feed. To verify, check tha
 - **XMLParser** for RSS feed parsing (incident.io provider)
 - **Structured concurrency** — `TaskGroup` for parallel fetching, `Task.sleep` for polling
 - **NSVisualEffectView** for translucent settings window
+- **SMAppService** for launch-at-login support
 - **UserDefaults** for persistence
 
 ## Project Structure
@@ -87,7 +89,7 @@ Services using incident.io status pages expose an RSS feed. To verify, check tha
 ```
 StatusBar/
   App/
-    StatusBarApp.swift              — Entry point, MenuBarExtra + Settings scenes
+    StatusBarApp.swift              — Entry point, MenuBarExtra + Settings scenes + AppDelegate
   Models/
     StatusPageModels.swift          — Codable structs for StatusPage API v2
     ServiceConfiguration.swift      — Service config, provider enum + defaults

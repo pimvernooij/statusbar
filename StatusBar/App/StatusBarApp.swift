@@ -2,6 +2,7 @@ import SwiftUI
 
 @main
 struct StatusBarApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var pollingService = StatusPollingService()
 
     var body: some Scene {
@@ -18,5 +19,13 @@ struct StatusBarApp: App {
         Settings {
             SettingsView(pollingService: pollingService)
         }
+    }
+}
+
+final class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Upgrade from LSUIElement (.prohibited) to .accessory at launch
+        // so the app can take focus when settings opens, without showing a dock icon
+        NSApp.setActivationPolicy(.accessory)
     }
 }
