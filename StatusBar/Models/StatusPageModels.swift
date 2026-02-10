@@ -32,3 +32,66 @@ struct StatusPageComponent: Codable, Sendable, Identifiable {
         case onlyShowIfDegraded = "only_show_if_degraded"
     }
 }
+
+// MARK: - incident.io JSON Response Models
+
+struct IncidentIOResponse: Codable, Sendable {
+    let summary: IncidentIOSummary
+}
+
+struct IncidentIOSummary: Codable, Sendable {
+    let name: String
+    let components: [IncidentIOComponent]
+    let affectedComponents: [IncidentIOAffectedComponent]
+    let ongoingIncidents: [IncidentIOIncident]
+    let structure: IncidentIOStructure?
+
+    enum CodingKeys: String, CodingKey {
+        case name, components, structure
+        case affectedComponents = "affected_components"
+        case ongoingIncidents = "ongoing_incidents"
+    }
+}
+
+struct IncidentIOComponent: Codable, Sendable, Identifiable {
+    let id: String
+    let name: String
+}
+
+struct IncidentIOAffectedComponent: Codable, Sendable {
+    let id: String
+    let name: String
+    let status: String
+}
+
+struct IncidentIOIncident: Codable, Sendable {
+    let id: String
+    let name: String
+}
+
+struct IncidentIOStructure: Codable, Sendable {
+    let id: String
+    let items: [IncidentIOStructureItem]
+}
+
+struct IncidentIOStructureItem: Codable, Sendable {
+    let group: IncidentIOGroup?
+}
+
+struct IncidentIOGroup: Codable, Sendable {
+    let id: String
+    let name: String
+    let hidden: Bool
+    let components: [IncidentIOGroupComponent]
+}
+
+struct IncidentIOGroupComponent: Codable, Sendable {
+    let componentId: String
+    let name: String
+    let hidden: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case name, hidden
+        case componentId = "component_id"
+    }
+}

@@ -23,7 +23,7 @@ struct MonitoredService: Codable, Identifiable, Equatable, Sendable {
         case .statusPage:
             URL(string: "https://\(domain)/api/v2/summary.json")
         case .incidentIO:
-            URL(string: "https://\(domain)/feed.rss")
+            URL(string: "https://\(domain)/proxy/\(domain)")
         }
     }
 

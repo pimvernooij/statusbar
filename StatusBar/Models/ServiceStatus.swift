@@ -40,6 +40,16 @@ enum OverallStatus: String, Comparable, Sendable {
         default: self = .unknown
         }
     }
+
+    init(incidentIOStatus: String) {
+        switch incidentIOStatus.lowercased() {
+        case "operational": self = .operational
+        case "degraded_performance", "degraded performance": self = .degradedPerformance
+        case "partial_outage", "partial outage": self = .partialOutage
+        case "full_outage", "full outage", "major_outage", "major outage": self = .majorOutage
+        default: self = .unknown
+        }
+    }
 }
 
 struct ServiceResult: Identifiable, Sendable {
