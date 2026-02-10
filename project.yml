@@ -16,7 +16,6 @@ targets:
           - "**/.DS_Store"
     settings:
       base:
-        INFOPLIST_FILE: StatusApp/Info.plist
         CODE_SIGN_ENTITLEMENTS: StatusApp/StatusApp.entitlements
         PRODUCT_BUNDLE_IDENTIFIER: com.statusapp.StatusApp
         PRODUCT_NAME: StatusApp
@@ -26,5 +25,9 @@ targets:
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        GENERATE_INFOPLIST_FILE: false
+        GENERATE_INFOPLIST_FILE: YES
         ENABLE_PREVIEWS: YES
+    info:
+      path: StatusApp/Info.plist
+      properties:
+        LSUIElement: true
