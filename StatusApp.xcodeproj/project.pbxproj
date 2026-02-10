@@ -1,0 +1,406 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		22260463D20967706773C8B6 /* StatusPageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FDD7680E1A10F1FCD92E55 /* StatusPageClient.swift */; };
+		27706687B3406742BFC5924D /* ComponentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463122B80767A8E9E55578A7 /* ComponentRowView.swift */; };
+		3D2F2C930D944AE2228EFD3B /* ServiceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE11DB15A7B6D425362922E /* ServiceRowView.swift */; };
+		4200784D3CB8B7C4F258795D /* StatusMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B35C769749B634F7BD234 /* StatusMenuView.swift */; };
+		498B5EB45503A9667B41B11C /* StatusColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCA7C8FE267DDCCC004E14C4 /* StatusColor.swift */; };
+		58E3CB42D7819C63FFB3DFB5 /* ServiceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DDE2D8D6F08E280ABE48AB8 /* ServiceConfiguration.swift */; };
+		620A298886A70C65BB0A0585 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248EF14C9A1B5B70BE8CD657 /* SettingsView.swift */; };
+		6C6CCD0D474934089D716388 /* StatusIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEBFFA2DBE3535BC95731C56 /* StatusIndicatorView.swift */; };
+		831CE6B7B56F79D2A215CDE3 /* MenuBarIconRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E8CE8CC760A625264D2C8E /* MenuBarIconRenderer.swift */; };
+		88D205859C1FAB2C7FC155BE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 469598D5C9C64822B7C2775D /* Assets.xcassets */; };
+		8BB0635FCEAC3C4AAED1A940 /* StatusPageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05425EBD9B91021AF15E8FE /* StatusPageModels.swift */; };
+		CC380B7F9864CAE3FE2332DF /* StatusAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6E081515455441EDFE753C /* StatusAppApp.swift */; };
+		E27FD3212C22C510DD47F985 /* ServiceStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9AE9BDC784D6CF9BE708C4D /* ServiceStatus.swift */; };
+		FD802CBDE2B85DF6573D08BD /* StatusPollingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EE46B1C22CFFB77EF2722C /* StatusPollingService.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1F5B35C769749B634F7BD234 /* StatusMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusMenuView.swift; sourceTree = "<group>"; };
+		248EF14C9A1B5B70BE8CD657 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2CE11DB15A7B6D425362922E /* ServiceRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceRowView.swift; sourceTree = "<group>"; };
+		2DB884947264C8668E4B995C /* StatusApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StatusApp.entitlements; sourceTree = "<group>"; };
+		463122B80767A8E9E55578A7 /* ComponentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentRowView.swift; sourceTree = "<group>"; };
+		469598D5C9C64822B7C2775D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4DDE2D8D6F08E280ABE48AB8 /* ServiceConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceConfiguration.swift; sourceTree = "<group>"; };
+		57E8CE8CC760A625264D2C8E /* MenuBarIconRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconRenderer.swift; sourceTree = "<group>"; };
+		69EE46B1C22CFFB77EF2722C /* StatusPollingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPollingService.swift; sourceTree = "<group>"; };
+		7C6E081515455441EDFE753C /* StatusAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusAppApp.swift; sourceTree = "<group>"; };
+		A0FDD7680E1A10F1FCD92E55 /* StatusPageClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPageClient.swift; sourceTree = "<group>"; };
+		A9AE9BDC784D6CF9BE708C4D /* ServiceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceStatus.swift; sourceTree = "<group>"; };
+		ABC2C974F50154E3A79CD409 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C05425EBD9B91021AF15E8FE /* StatusPageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPageModels.swift; sourceTree = "<group>"; };
+		C42E905C584DC1F2F68A8718 /* StatusApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StatusApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DCA7C8FE267DDCCC004E14C4 /* StatusColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusColor.swift; sourceTree = "<group>"; };
+		FEBFFA2DBE3535BC95731C56 /* StatusIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIndicatorView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0662D89EB209573742C84395 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				463122B80767A8E9E55578A7 /* ComponentRowView.swift */,
+				2CE11DB15A7B6D425362922E /* ServiceRowView.swift */,
+				248EF14C9A1B5B70BE8CD657 /* SettingsView.swift */,
+				FEBFFA2DBE3535BC95731C56 /* StatusIndicatorView.swift */,
+				1F5B35C769749B634F7BD234 /* StatusMenuView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		14297FB1C4B5847A5FDE714E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C42E905C584DC1F2F68A8718 /* StatusApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1A1C65DDFA877D3C5C6ADA32 = {
+			isa = PBXGroup;
+			children = (
+				4792492A2AE85332468FFAFC /* StatusApp */,
+				14297FB1C4B5847A5FDE714E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		27A91C84A9F24E28BA37586E /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				57E8CE8CC760A625264D2C8E /* MenuBarIconRenderer.swift */,
+				DCA7C8FE267DDCCC004E14C4 /* StatusColor.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		4792492A2AE85332468FFAFC /* StatusApp */ = {
+			isa = PBXGroup;
+			children = (
+				469598D5C9C64822B7C2775D /* Assets.xcassets */,
+				ABC2C974F50154E3A79CD409 /* Info.plist */,
+				2DB884947264C8668E4B995C /* StatusApp.entitlements */,
+				6FCD9258A71C98D65915A04B /* App */,
+				B16CB524D6C75289EC7C9842 /* Models */,
+				5928FD2E7DD8033CCF5710FB /* Services */,
+				27A91C84A9F24E28BA37586E /* Utilities */,
+				0662D89EB209573742C84395 /* Views */,
+			);
+			path = StatusApp;
+			sourceTree = "<group>";
+		};
+		5928FD2E7DD8033CCF5710FB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A0FDD7680E1A10F1FCD92E55 /* StatusPageClient.swift */,
+				69EE46B1C22CFFB77EF2722C /* StatusPollingService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		6FCD9258A71C98D65915A04B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7C6E081515455441EDFE753C /* StatusAppApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		B16CB524D6C75289EC7C9842 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4DDE2D8D6F08E280ABE48AB8 /* ServiceConfiguration.swift */,
+				A9AE9BDC784D6CF9BE708C4D /* ServiceStatus.swift */,
+				C05425EBD9B91021AF15E8FE /* StatusPageModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5B259CAF35F27D37C260D1B5 /* StatusApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1425BCD1A0EDC1BD2F27E9AC /* Build configuration list for PBXNativeTarget "StatusApp" */;
+			buildPhases = (
+				4D84CCC2FA4DA2A27B358817 /* Sources */,
+				27ADFB300DB98789A328E60B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StatusApp;
+			packageProductDependencies = (
+			);
+			productName = StatusApp;
+			productReference = C42E905C584DC1F2F68A8718 /* StatusApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7A3ECC88A177772030C950CD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					5B259CAF35F27D37C260D1B5 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = CC854E05353637D9518516B1 /* Build configuration list for PBXProject "StatusApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 1A1C65DDFA877D3C5C6ADA32;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5B259CAF35F27D37C260D1B5 /* StatusApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		27ADFB300DB98789A328E60B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88D205859C1FAB2C7FC155BE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4D84CCC2FA4DA2A27B358817 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				27706687B3406742BFC5924D /* ComponentRowView.swift in Sources */,
+				831CE6B7B56F79D2A215CDE3 /* MenuBarIconRenderer.swift in Sources */,
+				58E3CB42D7819C63FFB3DFB5 /* ServiceConfiguration.swift in Sources */,
+				3D2F2C930D944AE2228EFD3B /* ServiceRowView.swift in Sources */,
+				E27FD3212C22C510DD47F985 /* ServiceStatus.swift in Sources */,
+				620A298886A70C65BB0A0585 /* SettingsView.swift in Sources */,
+				CC380B7F9864CAE3FE2332DF /* StatusAppApp.swift in Sources */,
+				498B5EB45503A9667B41B11C /* StatusColor.swift in Sources */,
+				6C6CCD0D474934089D716388 /* StatusIndicatorView.swift in Sources */,
+				4200784D3CB8B7C4F258795D /* StatusMenuView.swift in Sources */,
+				22260463D20967706773C8B6 /* StatusPageClient.swift in Sources */,
+				8BB0635FCEAC3C4AAED1A940 /* StatusPageModels.swift in Sources */,
+				FD802CBDE2B85DF6573D08BD /* StatusPollingService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		436E6BF5D3BBF3D86C58A1C6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A6177EDA654A5854DBD8EF8B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		B150210AC8EE03D23D47677F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = StatusApp/StatusApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StatusApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.statusapp.StatusApp;
+				PRODUCT_NAME = StatusApp;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		D0AD5A6C86444CE648C2B0DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = StatusApp/StatusApp.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StatusApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.statusapp.StatusApp;
+				PRODUCT_NAME = StatusApp;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1425BCD1A0EDC1BD2F27E9AC /* Build configuration list for PBXNativeTarget "StatusApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B150210AC8EE03D23D47677F /* Debug */,
+				D0AD5A6C86444CE648C2B0DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		CC854E05353637D9518516B1 /* Build configuration list for PBXProject "StatusApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				436E6BF5D3BBF3D86C58A1C6 /* Debug */,
+				A6177EDA654A5854DBD8EF8B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7A3ECC88A177772030C950CD /* Project object */;
+}
