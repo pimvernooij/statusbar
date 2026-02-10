@@ -1,0 +1,25 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          xcodebuild -scheme StatusBar -destination 'platform=macOS' \
+            -derivedDataPath build \
+            build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StatusBar
+          path: build/Build/Products/Debug/StatusBar.app
