@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-StatusBar is a macOS menu bar application (status bar app) that monitors cloud service status pages using the Atlassian StatusPage API v2. Built with SwiftUI, targeting macOS 14+ (Sonoma).
+StatusBar is a macOS menu bar application that monitors cloud service status pages via Atlassian StatusPage and incident.io JSON APIs, with native macOS notifications on status changes. Built with SwiftUI, targeting macOS 14+ (Sonoma).
 
 ## Architecture
 
@@ -10,7 +10,8 @@ StatusBar is a macOS menu bar application (status bar app) that monitors cloud s
 - **State Management**: Swift Observation framework (`@Observable` macro)
 - **Networking**: Native `URLSession` with `async/await` and `TaskGroup`
 - **Persistence**: `UserDefaults` with JSON-encoded configuration
-- **Dependencies**: None - system frameworks only (SwiftUI, Foundation, AppKit)
+- **Notifications**: `UNUserNotificationCenter` for native alerts on status changes
+- **Dependencies**: None - system frameworks only (SwiftUI, Foundation, AppKit, UserNotifications)
 - **App Type**: LSUIElement (menu-bar-only, no Dock icon)
 
 ## Swift & SwiftUI Best Practices
@@ -62,23 +63,34 @@ StatusBar is a macOS menu bar application (status bar app) that monitors cloud s
 - No third-party dependencies unless absolutely necessary.
 - Minimum deployment target: macOS 14.0 (Sonoma).
 
-### StatusPage API v2
+### Status Provider APIs
 
-The app consumes the Atlassian StatusPage API. Key details:
+The app supports two provider types, both JSON-based:
 
-- Endpoint pattern: `https://{domain}/api/v2/summary.json`
+**Atlassian StatusPage:**
+- Endpoint: `https://{domain}/api/v2/summary.json`
 - Component statuses: `operational`, `degraded_performance`, `partial_outage`, `major_outage`
 - Page indicators: `none`, `minor`, `major`, `critical`
-- Components may have `group: true` (container, not a real service) or `only_show_if_degraded: true` - filter these appropriately.
+- Components may have `group: true` (container, not a real service) or `only_show_if_degraded: true` — filter these appropriately.
 - Always use snake_case `CodingKeys` to map API field names to Swift's camelCase.
+
+**incident.io:**
+- Endpoint: `https://{domain}/proxy/{domain}`
+- Uses a structure-based component model with groups, affected components, and ongoing incidents.
+- Component statuses: `operational`, `degraded_performance`, `partial_outage`, `full_outage`
+- Groups can be `hidden` — skip these. Components within groups can also be `hidden`.
 
 ### Testing & Verification
 
 - Build with `xcodebuild -scheme StatusBar -destination 'platform=macOS'`
 - Verify menu bar icon appears and reflects correct status
-- Test with live APIs: status.claude.com, www.githubstatus.com
+- Test with live APIs: status.claude.com (StatusPage), eu.githubstatus.com (StatusPage), status.openai.com (incident.io)
 - Verify Settings window opens and persists changes
 - Test error states: disable network, use invalid domains
+
+### Documentation
+
+- Always update `README.md` when making significant changes (new features, renamed files, architecture changes). Keep the Features list, Architecture section, and Project Structure tree in sync with the codebase.
 
 ### Common Pitfalls
 

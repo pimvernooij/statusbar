@@ -12,9 +12,11 @@ StatusBar polls [Atlassian StatusPage](https://www.atlassian.com/software/status
 - **Two provider types** — Atlassian StatusPage and incident.io (both JSON APIs)
 - **Expandable service rows** with component-level breakdown
 - **Quick links** to open status pages in your browser
+- **Native notifications** when a service status changes (degradation or recovery)
 - **Configurable polling interval** (30s to 10 minutes)
 - **Add any StatusPage or incident.io service** via Settings
 - **Launch at Login** — optional, toggle in Settings
+- **Test notification** button in Settings to verify notification permissions
 - **Translucent settings panel** with vibrancy background, adapts to light/dark mode
 - **Zero dependencies** — built entirely with system frameworks
 
@@ -80,6 +82,7 @@ Services using incident.io status pages expose a JSON API. To verify, check that
 - **Actor-based** API client for thread-safe networking
 - **Structured concurrency** — `TaskGroup` for parallel fetching, `Task.sleep` for polling
 - **NSVisualEffectView** for translucent settings window
+- **UNUserNotificationCenter** for native macOS notifications on status changes
 - **SMAppService** for launch-at-login support
 - **UserDefaults** for persistence
 
@@ -94,8 +97,8 @@ StatusBar/
     ServiceConfiguration.swift      — Service config, provider enum + defaults
     ServiceStatus.swift             — Status enums + result types
   Services/
-    StatusPageClient.swift          — Actor-based async API client (StatusPage + incident.io)
-    StatusPollingService.swift      — Observable polling coordinator
+    StatusClient.swift              — Actor-based async API client (StatusPage + incident.io)
+    StatusPollingService.swift      — Observable polling coordinator + notification dispatch
   Views/
     StatusMenuView.swift            — Main dropdown content
     ServiceRowView.swift            — Expandable service row
