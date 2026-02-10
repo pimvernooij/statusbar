@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 @main
 struct StatusBarApp: App {
@@ -27,5 +28,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Upgrade from LSUIElement (.prohibited) to .accessory at launch
         // so the app can take focus when settings opens, without showing a dock icon
         NSApp.setActivationPolicy(.accessory)
+
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
     }
 }

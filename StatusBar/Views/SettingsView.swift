@@ -256,6 +256,29 @@ struct SettingsView: View {
             .buttonStyle(.plain)
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
+            Text("Notifications")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
+
+            Button {
+                pollingService.sendTestNotification()
+            } label: {
+                HStack {
+                    Text("Send Test Notification")
+                        .font(.body)
+                    Spacer()
+                    Image(systemName: "bell.badge")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(overlay.opacity(0.04))
+            }
+            .buttonStyle(.plain)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+
             Spacer()
         }
     }

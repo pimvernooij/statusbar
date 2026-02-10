@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import UserNotifications
 
 @MainActor
 @Observable
@@ -21,7 +22,7 @@ final class StatusPollingService {
         return results.map(\.status).max() ?? .unknown
     }
 
-    private let client = StatusPageClient()
+    private let client = StatusClient()
     private var pollingTask: Task<Void, Never>?
 
     private static let servicesKey = "monitoredServices"
@@ -57,10 +58,58 @@ final class StatusPollingService {
         isLoading = true
         let fetchedResults = await client.fetchAll(services: services)
         if !Task.isCancelled {
+            notifyStatusChanges(old: results, new: fetchedResults)
             results = fetchedResults
             lastUpdated = Date()
         }
         isLoading = false
+    }
+
+    func sendTestNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "StatusBar"
+        content.body = "Notifications are working!"
+        content.sound = .default
+
+        let request = UNNotificationRequest(
+            identifier: "test-notification",
+            content: content,
+            trigger: nil
+        )
+        UNUserNotificationCenter.current().add(request)
+    }
+
+    private func notifyStatusChanges(old: [ServiceResult], new: [ServiceResult]) {
+        guard !old.isEmpty else { return }
+
+        let oldByID = Dictionary(uniqueKeysWithValues: old.map { ($0.service.id, $0) })
+
+        for result in new {
+            guard let previous = oldByID[result.service.id] else { continue }
+            guard result.status != previous.status else { continue }
+
+            let content = UNMutableNotificationContent()
+            content.title = result.service.name
+            content.sound = .default
+
+            if result.status == .operational {
+                content.body = "All Systems Operational"
+            } else {
+                let affected = result.visibleComponents
+                    .filter { $0.status != .operational }
+                    .map { "\($0.name): \($0.status.description)" }
+                content.body = affected.isEmpty
+                    ? result.statusDescription
+                    : affected.joined(separator: ", ")
+            }
+
+            let request = UNNotificationRequest(
+                identifier: result.service.id.uuidString,
+                content: content,
+                trigger: nil
+            )
+            UNUserNotificationCenter.current().add(request)
+        }
     }
 
     // MARK: - Persistence

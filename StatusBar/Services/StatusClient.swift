@@ -1,6 +1,6 @@
 import Foundation
 
-actor StatusPageClient {
+actor StatusClient {
     private let session: URLSession
 
     init() {

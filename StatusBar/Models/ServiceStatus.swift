@@ -7,6 +7,16 @@ enum OverallStatus: String, Comparable, Sendable {
     case majorOutage
     case unknown
 
+    var description: String {
+        switch self {
+        case .operational: "Operational"
+        case .degradedPerformance: "Degraded Performance"
+        case .partialOutage: "Partial Outage"
+        case .majorOutage: "Major Outage"
+        case .unknown: "Unknown"
+        }
+    }
+
     var severity: Int {
         switch self {
         case .operational: 0

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		22260463D20967706773C8B6 /* StatusPageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FDD7680E1A10F1FCD92E55 /* StatusPageClient.swift */; };
+		22260463D20967706773C8B6 /* StatusClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FDD7680E1A10F1FCD92E55 /* StatusClient.swift */; };
 		27706687B3406742BFC5924D /* ComponentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463122B80767A8E9E55578A7 /* ComponentRowView.swift */; };
 		3D2F2C930D944AE2228EFD3B /* ServiceRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE11DB15A7B6D425362922E /* ServiceRowView.swift */; };
 		4200784D3CB8B7C4F258795D /* StatusMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F5B35C769749B634F7BD234 /* StatusMenuView.swift */; };
@@ -34,7 +34,7 @@
 		57E8CE8CC760A625264D2C8E /* MenuBarIconRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconRenderer.swift; sourceTree = "<group>"; };
 		69EE46B1C22CFFB77EF2722C /* StatusPollingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPollingService.swift; sourceTree = "<group>"; };
 		7C6E081515455441EDFE753C /* StatusBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarApp.swift; sourceTree = "<group>"; };
-		A0FDD7680E1A10F1FCD92E55 /* StatusPageClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPageClient.swift; sourceTree = "<group>"; };
+		A0FDD7680E1A10F1FCD92E55 /* StatusClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusClient.swift; sourceTree = "<group>"; };
 		A9AE9BDC784D6CF9BE708C4D /* ServiceStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceStatus.swift; sourceTree = "<group>"; };
 		ABC2C974F50154E3A79CD409 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C05425EBD9B91021AF15E8FE /* StatusPageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPageModels.swift; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 		5928FD2E7DD8033CCF5710FB /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				A0FDD7680E1A10F1FCD92E55 /* StatusPageClient.swift */,
+				A0FDD7680E1A10F1FCD92E55 /* StatusClient.swift */,
 				69EE46B1C22CFFB77EF2722C /* StatusPollingService.swift */,
 			);
 			path = Services;
@@ -203,7 +203,7 @@
 				498B5EB45503A9667B41B11C /* StatusColor.swift in Sources */,
 				6C6CCD0D474934089D716388 /* StatusIndicatorView.swift in Sources */,
 				4200784D3CB8B7C4F258795D /* StatusMenuView.swift in Sources */,
-				22260463D20967706773C8B6 /* StatusPageClient.swift in Sources */,
+				22260463D20967706773C8B6 /* StatusClient.swift in Sources */,
 				8BB0635FCEAC3C4AAED1A940 /* StatusPageModels.swift in Sources */,
 				FD802CBDE2B85DF6573D08BD /* StatusPollingService.swift in Sources */,
 			);
