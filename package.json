@@ -1,0 +1,11 @@
+{
+  "name": "statusbar",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "version": "changeset version && ./scripts/sync-version.sh"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0"
+  }
+}
