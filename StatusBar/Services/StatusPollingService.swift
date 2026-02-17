@@ -17,6 +17,10 @@ final class StatusPollingService {
         didSet { saveRefreshInterval() }
     }
 
+    var notificationsEnabled: Bool {
+        didSet { saveNotificationsEnabled() }
+    }
+
     var worstStatus: OverallStatus {
         guard !results.isEmpty else { return .unknown }
         return results.map(\.status).max() ?? .unknown
@@ -27,11 +31,13 @@ final class StatusPollingService {
 
     private static let servicesKey = "monitoredServices"
     private static let intervalKey = "refreshInterval"
+    private static let notificationsEnabledKey = "notificationsEnabled"
     private static let defaultInterval: TimeInterval = 120
 
     init() {
         self.services = Self.loadServices()
         self.refreshInterval = Self.loadRefreshInterval()
+        self.notificationsEnabled = Self.loadNotificationsEnabled()
         startPolling()
     }
 
@@ -80,6 +86,7 @@ final class StatusPollingService {
     }
 
     private func notifyStatusChanges(old: [ServiceResult], new: [ServiceResult]) {
+        guard notificationsEnabled else { return }
         guard !old.isEmpty else { return }
 
         let oldByID = Dictionary(uniqueKeysWithValues: old.map { ($0.service.id, $0) })
@@ -126,6 +133,10 @@ final class StatusPollingService {
         startPolling()
     }
 
+    private func saveNotificationsEnabled() {
+        UserDefaults.standard.set(notificationsEnabled, forKey: Self.notificationsEnabledKey)
+    }
+
     private static func loadServices() -> [MonitoredService] {
         guard let data = UserDefaults.standard.data(forKey: servicesKey),
               let services = try? JSONDecoder().decode([MonitoredService].self, from: data),
@@ -139,5 +150,12 @@ final class StatusPollingService {
     private static func loadRefreshInterval() -> TimeInterval {
         let interval = UserDefaults.standard.double(forKey: intervalKey)
         return interval > 0 ? interval : defaultInterval
+    }
+
+    private static func loadNotificationsEnabled() -> Bool {
+        if UserDefaults.standard.object(forKey: notificationsEnabledKey) == nil {
+            return true
+        }
+        return UserDefaults.standard.bool(forKey: notificationsEnabledKey)
     }
 }
