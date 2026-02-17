@@ -27,11 +27,12 @@ StatusBar polls [Atlassian StatusPage](https://www.atlassian.com/software/status
 | Claude | status.claude.com | StatusPage |
 | GitHub | eu.githubstatus.com | StatusPage |
 | OpenAI | status.openai.com | incident.io |
+| Vercel | www.vercel-status.com | StatusPage |
 
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
-- Xcode 15+ (to build from source)
+- Xcode 16+ (to build from source)
 
 ## Getting Started
 
@@ -44,6 +45,18 @@ open StatusBar.xcodeproj
 Press **Cmd+R** in Xcode to build and run.
 
 ### Building from the command line
+
+Using [Task](https://taskfile.dev) (`brew install go-task`):
+
+```bash
+task build     # debug build
+task release   # release build
+task run       # build and open the app
+task zip       # build release + create distributable zip
+task clean     # clean build artifacts
+```
+
+Or directly with xcodebuild:
 
 ```bash
 xcodebuild -scheme StatusBar -destination 'platform=macOS' build
