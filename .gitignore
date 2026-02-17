@@ -15,5 +15,8 @@ build/
 .vscode/
 .idea/
 
+# Node (changesets)
+node_modules/
+
 # Claude
 .claude/

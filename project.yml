@@ -19,8 +19,8 @@ targets:
         CODE_SIGN_ENTITLEMENTS: StatusBar/StatusBar.entitlements
         PRODUCT_BUNDLE_IDENTIFIER: com.statusapp.StatusBar
         PRODUCT_NAME: StatusBar
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1.0.0"
         SWIFT_VERSION: "5.9"
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         CODE_SIGN_STYLE: Automatic
