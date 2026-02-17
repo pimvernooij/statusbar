@@ -1,0 +1,53 @@
+version: "3"
+
+vars:
+  SCHEME: StatusBar
+  DERIVED_DATA: build
+  APP_NAME: StatusBar.app
+  DEBUG_APP: "{{.DERIVED_DATA}}/Build/Products/Debug/{{.APP_NAME}}"
+  RELEASE_APP: "{{.DERIVED_DATA}}/Build/Products/Release/{{.APP_NAME}}"
+
+tasks:
+  default:
+    desc: Build the app (debug)
+    cmds:
+      - task: build
+
+  build:
+    desc: Build the app (debug)
+    cmds:
+      - xcodebuild -scheme {{.SCHEME}} -destination 'platform=macOS'
+          -derivedDataPath {{.DERIVED_DATA}}
+          build
+
+  release:
+    desc: Build the app (release)
+    cmds:
+      - xcodebuild -scheme {{.SCHEME}} -destination 'platform=macOS'
+          -derivedDataPath {{.DERIVED_DATA}}
+          -configuration Release
+          build
+
+  run:
+    desc: Build and run the app
+    cmds:
+      - task: build
+      - open "{{.DEBUG_APP}}"
+
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - xcodebuild -scheme {{.SCHEME}} -derivedDataPath {{.DERIVED_DATA}} clean
+      - rm -rf {{.DERIVED_DATA}}
+
+  generate:
+    desc: Regenerate Xcode project from project.yml (requires xcodegen)
+    cmds:
+      - xcodegen generate
+
+  zip:
+    desc: Build release and create a distributable zip
+    cmds:
+      - task: release
+      - ditto -c -k --sequesterRsrc --keepParent "{{.RELEASE_APP}}" StatusBar.zip
+      - echo "Created StatusBar.zip"

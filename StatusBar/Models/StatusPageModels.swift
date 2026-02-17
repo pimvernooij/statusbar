@@ -59,9 +59,13 @@ struct IncidentIOComponent: Codable, Sendable, Identifiable {
 }
 
 struct IncidentIOAffectedComponent: Codable, Sendable {
-    let id: String
-    let name: String
+    let componentId: String
     let status: String
+
+    enum CodingKeys: String, CodingKey {
+        case componentId = "component_id"
+        case status
+    }
 }
 
 struct IncidentIOIncident: Codable, Sendable {

@@ -18,8 +18,14 @@ jobs:
             -derivedDataPath build \
             build
 
+      - name: Package app
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            build/Build/Products/Debug/StatusBar.app \
+            StatusBar.zip
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: StatusBar
-          path: build/Build/Products/Debug/StatusBar.app
+          path: StatusBar.zip

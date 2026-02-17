@@ -93,7 +93,7 @@ actor StatusClient {
 
             // Build a lookup of affected component IDs to their status
             let affectedLookup = Dictionary(
-                summary.affectedComponents.map { ($0.id, $0.status) },
+                summary.affectedComponents.map { ($0.componentId, $0.status) },
                 uniquingKeysWith: { _, last in last }
             )
 
