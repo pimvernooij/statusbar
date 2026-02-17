@@ -9,6 +9,7 @@ private struct ContentHeightKey: PreferenceKey {
 
 struct StatusMenuView: View {
     let pollingService: StatusPollingService
+    @Environment(\.openWindow) private var openWindow
     @State private var contentHeight: CGFloat = 0
 
     var body: some View {
@@ -83,11 +84,11 @@ struct StatusMenuView: View {
             Divider()
 
             HStack {
-                SettingsLink {
-                    Text("Settings...")
-                        .font(.caption)
+                Button("Settings...") {
+                    openWindow(id: "settings")
                 }
                 .buttonStyle(.plain)
+                .font(.caption)
                 .foregroundStyle(.primary)
                 Spacer()
                 Button("Quit") {

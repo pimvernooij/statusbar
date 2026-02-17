@@ -17,9 +17,10 @@ struct StatusBarApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        Settings {
+        Window("", id: "settings") {
             SettingsView(pollingService: pollingService)
         }
+        .windowResizability(.contentSize)
     }
 }
 

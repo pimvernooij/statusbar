@@ -2,18 +2,22 @@ import SwiftUI
 import AppKit
 import ServiceManagement
 
-// MARK: - Translucent Background
+// MARK: - Window Configuration
 
-private struct VisualEffectBackground: NSViewRepresentable {
-    func makeNSView(context: Context) -> NSVisualEffectView {
-        let view = NSVisualEffectView()
-        view.material = .hudWindow
-        view.blendingMode = .behindWindow
-        view.state = .active
+private struct WindowConfigurator: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView()
+        DispatchQueue.main.async {
+            guard let window = view.window else { return }
+            window.alphaValue = 0.9
+            window.level = .floating
+            window.standardWindowButton(.miniaturizeButton)?.isHidden = true
+            window.standardWindowButton(.zoomButton)?.isHidden = true
+        }
         return view
     }
 
-    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
+    func updateNSView(_ nsView: NSView, context: Context) {}
 }
 
 // MARK: - Settings View
@@ -66,8 +70,8 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 16)
-        .frame(width: 500, height: 400)
-        .background(VisualEffectBackground())
+        .frame(width: 500, height: 460)
+        .background(WindowConfigurator())
         .onAppear {
             // Dismiss the MenuBarExtra panel so it releases focus
             for window in NSApp.windows where window is NSPanel {
@@ -261,22 +265,43 @@ struct SettingsView: View {
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
 
-            Button {
-                pollingService.sendTestNotification()
-            } label: {
-                HStack {
-                    Text("Send Test Notification")
-                        .font(.body)
-                    Spacer()
-                    Image(systemName: "bell.badge")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            VStack(spacing: 2) {
+                Button {
+                    pollingService.notificationsEnabled.toggle()
+                } label: {
+                    HStack {
+                        Text("Enable Notifications")
+                            .font(.body)
+                        Spacer()
+                        if pollingService.notificationsEnabled {
+                            Image(systemName: "checkmark")
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(.green)
+                        }
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(overlay.opacity(pollingService.notificationsEnabled ? 0.08 : 0.04))
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-                .background(overlay.opacity(0.04))
+                .buttonStyle(.plain)
+
+                Button {
+                    pollingService.sendTestNotification()
+                } label: {
+                    HStack {
+                        Text("Send Test Notification")
+                            .font(.body)
+                        Spacer()
+                        Image(systemName: "bell.badge")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(overlay.opacity(0.04))
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
             Spacer()
