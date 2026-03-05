@@ -201,3 +201,18 @@ struct CachetComponent: Codable, Sendable {
         case statusName = "status_name"
     }
 }
+
+// MARK: - UptimeRobot Public Status Page API
+
+struct UptimeRobotResponse: Codable, Sendable {
+    let status: String
+    let data: [UptimeRobotMonitor]
+}
+
+struct UptimeRobotMonitor: Codable, Sendable {
+    let monitorId: Int
+    let name: String
+    let statusClass: String
+    let groupId: Int
+    let groupName: String
+}
