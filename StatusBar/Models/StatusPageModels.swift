@@ -99,3 +99,74 @@ struct IncidentIOGroupComponent: Codable, Sendable {
         case componentId = "component_id"
     }
 }
+
+// MARK: - status.io Public API Response Models
+
+struct StatusIOResponse: Codable, Sendable {
+    let result: StatusIOResult
+}
+
+struct StatusIOResult: Codable, Sendable {
+    let statusOverall: StatusIOOverall
+    let status: [StatusIOComponent]
+    let incidents: [StatusIOIncident]
+    let maintenance: StatusIOMaintenance
+
+    enum CodingKeys: String, CodingKey {
+        case status, incidents, maintenance
+        case statusOverall = "status_overall"
+    }
+}
+
+struct StatusIOOverall: Codable, Sendable {
+    let updated: String
+    let status: String
+    let statusCode: Int
+
+    enum CodingKeys: String, CodingKey {
+        case updated, status
+        case statusCode = "status_code"
+    }
+}
+
+struct StatusIOComponent: Codable, Sendable {
+    let id: String
+    let name: String
+    let status: String
+    let statusCode: Int
+    let containers: [StatusIOContainer]
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, status, containers
+        case statusCode = "status_code"
+    }
+}
+
+struct StatusIOContainer: Codable, Sendable {
+    let id: String
+    let name: String
+    let status: String
+    let statusCode: Int
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, status
+        case statusCode = "status_code"
+    }
+}
+
+struct StatusIOIncident: Codable, Sendable {
+    let name: String
+
+    enum CodingKeys: String, CodingKey {
+        case name
+    }
+}
+
+struct StatusIOMaintenance: Codable, Sendable {
+    let active: [StatusIOMaintenanceEvent]
+    let upcoming: [StatusIOMaintenanceEvent]
+}
+
+struct StatusIOMaintenanceEvent: Codable, Sendable {
+    let name: String
+}

@@ -60,6 +60,18 @@ enum OverallStatus: String, Comparable, Sendable {
         default: self = .unknown
         }
     }
+
+    init(statusIOCode: Int) {
+        switch statusIOCode {
+        case 100: self = .operational
+        case 200: self = .degradedPerformance  // Planned Maintenance
+        case 300: self = .degradedPerformance
+        case 400: self = .partialOutage
+        case 500: self = .majorOutage
+        case 600: self = .majorOutage  // Security Issue
+        default: self = .unknown
+        }
+    }
 }
 
 struct ServiceResult: Identifiable, Sendable {

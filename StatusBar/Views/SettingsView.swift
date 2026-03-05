@@ -141,10 +141,11 @@ struct SettingsView: View {
                     Picker("", selection: $newServiceProvider) {
                         Text("StatusPage").tag(ServiceProvider.statusPage)
                         Text("incident.io").tag(ServiceProvider.incidentIO)
+                        Text("status.io").tag(ServiceProvider.statusIO)
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
-                    .frame(width: 180)
+                    .frame(width: 250)
                 }
 
                 // Row 2: Domain + Add button
@@ -195,7 +196,7 @@ struct SettingsView: View {
                     Text("·")
                         .font(.caption)
                         .foregroundStyle(.tertiary)
-                    Text(service.provider == .statusPage ? "StatusPage" : "incident.io")
+                    Text(service.provider.displayName)
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 }

@@ -2,6 +2,7 @@ import Foundation
 
 actor StatusClient {
     private let session: URLSession
+    private var statusIOPageIDs: [String: String] = [:]
 
     init() {
         let config = URLSessionConfiguration.default
@@ -16,6 +17,8 @@ actor StatusClient {
             return await fetchStatusPageSummary(for: service)
         case .incidentIO:
             return await fetchIncidentIOSummary(for: service)
+        case .statusIO:
+            return await fetchStatusIOSummary(for: service)
         }
     }
 
@@ -141,6 +144,109 @@ actor StatusClient {
                 description = incident.name
             } else {
                 description = "All Systems Operational"
+            }
+
+            return ServiceResult(
+                id: service.id,
+                service: service,
+                status: overallStatus,
+                statusDescription: description,
+                components: components,
+                error: nil
+            )
+        } catch is CancellationError {
+            return .error(service: service, message: "Request cancelled")
+        } catch let error as URLError {
+            return .error(service: service, message: error.localizedDescription)
+        } catch let error as DecodingError {
+            return .error(service: service, message: "Failed to parse response: \(error.localizedDescription)")
+        } catch {
+            return .error(service: service, message: error.localizedDescription)
+        }
+    }
+
+    // MARK: - status.io (Public Status API)
+
+    private func discoverStatusIOPageID(domain: String) async throws -> String {
+        if let cached = statusIOPageIDs[domain] {
+            return cached
+        }
+
+        guard let url = URL(string: "https://\(domain)") else {
+            throw URLError(.badURL)
+        }
+
+        let (data, _) = try await session.data(from: url)
+        guard let html = String(data: data, encoding: .utf8) else {
+            throw URLError(.cannotDecodeContentData)
+        }
+
+        // Look for: var defined  = '...' or statuspageId = '...'
+        guard let range = html.range(of: #"statuspageId\s*=\s*['\"]([a-f0-9]+)['\"]"#, options: .regularExpression),
+              let idRange = html[range].range(of: #"[a-f0-9]{20,}"#, options: .regularExpression) else {
+            throw URLError(.cannotParseResponse)
+        }
+
+        let pageID = String(html[idRange])
+        statusIOPageIDs[domain] = pageID
+        return pageID
+    }
+
+    private func fetchStatusIOSummary(for service: MonitoredService) async -> ServiceResult {
+        do {
+            let pageID = try await discoverStatusIOPageID(domain: service.domain)
+            guard let url = URL(string: "https://api.status.io/1.0/status/\(pageID)") else {
+                return .error(service: service, message: "Invalid status.io API URL")
+            }
+
+            let (data, response) = try await session.data(from: url)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return .error(service: service, message: "Invalid response")
+            }
+
+            guard (200...299).contains(httpResponse.statusCode) else {
+                return .error(service: service, message: "HTTP \(httpResponse.statusCode)")
+            }
+
+            let decoder = JSONDecoder()
+            let parsed = try decoder.decode(StatusIOResponse.self, from: data)
+            let result = parsed.result
+
+            // Build components: each status.io component becomes a group,
+            // each container becomes a visible component under it
+            var components: [ComponentResult] = []
+            for component in result.status {
+                // Add the component as a group header
+                components.append(ComponentResult(
+                    id: component.id,
+                    name: component.name,
+                    status: OverallStatus(statusIOCode: component.statusCode),
+                    isGroup: true,
+                    onlyShowIfDegraded: false
+                ))
+
+                // Add each container (region) as a child component
+                for container in component.containers {
+                    components.append(ComponentResult(
+                        id: container.id,
+                        name: container.name,
+                        status: OverallStatus(statusIOCode: container.statusCode),
+                        isGroup: false,
+                        onlyShowIfDegraded: false
+                    ))
+                }
+            }
+
+            let overallStatus = OverallStatus(statusIOCode: result.statusOverall.statusCode)
+
+            let description: String
+            if let incident = result.incidents.first {
+                description = incident.name
+            } else if !result.maintenance.active.isEmpty {
+                description = result.maintenance.active[0].name
+            } else {
+                description = result.statusOverall.status
             }
 
             return ServiceResult(
