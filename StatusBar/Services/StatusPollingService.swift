@@ -105,6 +105,8 @@ final class StatusPollingService {
         for result in new {
             guard let previous = oldByID[result.service.id] else { continue }
             guard result.status != previous.status else { continue }
+            // Don't notify for fetch errors (e.g. network down after sleep)
+            guard result.error == nil && previous.error == nil else { continue }
 
             let content = UNMutableNotificationContent()
             content.title = result.service.name
