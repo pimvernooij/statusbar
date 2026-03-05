@@ -2,19 +2,19 @@
 
 A lightweight macOS menu bar app that monitors cloud service status pages at a glance.
 
-StatusBar polls [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) and [incident.io](https://incident.io) JSON APIs, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details.
+StatusBar polls status page APIs from multiple providers, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details. Just enter a status page URL — the provider is auto-detected.
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue) ![Swift](https://img.shields.io/badge/Swift-5.9-orange) ![No Dependencies](https://img.shields.io/badge/dependencies-none-green)
 
 ## Features
 
 - **Menu bar icon** that changes color based on overall status (green/yellow/orange/red/gray)
-- **Two provider types** — Atlassian StatusPage and incident.io (both JSON APIs)
+- **Five provider types** — auto-detected from URL (StatusPage, incident.io, status.io, Cachet, UptimeRobot)
 - **Expandable service rows** with component-level breakdown
 - **Quick links** to open status pages in your browser
 - **Native notifications** when a service status changes (degradation or recovery)
 - **Configurable polling interval** (30s to 10 minutes)
-- **Add any StatusPage or incident.io service** via Settings
+- **Add any supported status page** via Settings — just paste the URL
 - **Launch at Login** — optional, toggle in Settings
 - **Test notification** button in Settings to verify notification permissions
 - **Translucent settings panel** with vibrancy background, adapts to light/dark mode
@@ -73,20 +73,19 @@ The app runs as a menu-bar-only app — it won't appear in the Dock.
 
 ## Adding Services
 
-### StatusPage services
-
-Any service using the Atlassian StatusPage API works (Vercel, Cloudflare, Datadog, Twilio, etc.). To verify a domain, check that `https://<domain>/api/v2/summary.json` returns JSON.
-
-### incident.io services
-
-Services using incident.io status pages expose a JSON API. To verify, check that `https://<domain>/proxy/<domain>` returns JSON.
-
-### Adding a service
-
 1. Click the menu bar icon → **Settings...**
-2. Enter a name and the status page domain (e.g. `status.vercel.com`)
-3. Select the provider type (**StatusPage** or **incident.io**)
-4. Click **+** to add
+2. Enter the status page URL (e.g. `status.vercel.com`)
+3. Click **+** — the provider and service name are auto-detected
+
+### Supported Providers
+
+| Provider | Example | Detection |
+|----------|---------|-----------|
+| [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) | status.claude.com, eu.githubstatus.com | `/api/v2/summary.json` |
+| [incident.io](https://incident.io) | status.openai.com | `/proxy/{domain}` |
+| [status.io](https://status.io) | status.commercetools.com | `statuspageId` in HTML |
+| [Cachet](https://github.com/CachetHQ/Cachet) | status.bluestonepim.com | `/api/v1/components/groups` |
+| [UptimeRobot](https://uptimerobot.com) | uptime.storyblok.com | `pspApiPath` in HTML |
 
 ## Architecture
 
@@ -106,11 +105,11 @@ StatusBar/
   App/
     StatusBarApp.swift              — Entry point, MenuBarExtra + Settings scenes + AppDelegate
   Models/
-    StatusPageModels.swift          — Codable structs for StatusPage + incident.io APIs
+    StatusPageModels.swift          — Codable structs for all provider APIs
     ServiceConfiguration.swift      — Service config, provider enum + defaults
     ServiceStatus.swift             — Status enums + result types
   Services/
-    StatusClient.swift              — Actor-based async API client (StatusPage + incident.io)
+    StatusClient.swift              — Actor-based async API client + provider auto-detection
     StatusPollingService.swift      — Observable polling coordinator + notification dispatch
   Views/
     StatusMenuView.swift            — Main dropdown content
