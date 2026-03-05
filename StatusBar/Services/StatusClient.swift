@@ -343,6 +343,80 @@ actor StatusClient {
         }
     }
 
+    // MARK: - Provider Auto-Detection
+
+    struct DetectedService: Sendable {
+        let name: String
+        let provider: ServiceProvider
+    }
+
+    func detectProvider(domain: String) async throws -> DetectedService {
+        // 1. Try StatusPage: GET /api/v2/summary.json
+        if let url = URL(string: "https://\(domain)/api/v2/summary.json") {
+            if let (data, response) = try? await session.data(from: url),
+               let http = response as? HTTPURLResponse,
+               (200...299).contains(http.statusCode),
+               let summary = try? JSONDecoder().decode(StatusPageSummary.self, from: data) {
+                return DetectedService(name: summary.page.name, provider: .statusPage)
+            }
+        }
+
+        // 2. Try Cachet: GET /api/v1/components/groups
+        if let url = URL(string: "https://\(domain)/api/v1/components/groups") {
+            if let (data, response) = try? await session.data(from: url),
+               let http = response as? HTTPURLResponse,
+               (200...299).contains(http.statusCode),
+               (try? JSONDecoder().decode(CachetGroupsResponse.self, from: data)) != nil {
+                let name = await fetchPageTitle(domain: domain) ?? domain
+                return DetectedService(name: name, provider: .cachet)
+            }
+        }
+
+        // 3. Try incident.io: GET /proxy/{domain}
+        if let url = URL(string: "https://\(domain)/proxy/\(domain)") {
+            if let (data, response) = try? await session.data(from: url),
+               let http = response as? HTTPURLResponse,
+               (200...299).contains(http.statusCode),
+               let parsed = try? JSONDecoder().decode(IncidentIOResponse.self, from: data) {
+                return DetectedService(name: parsed.summary.name, provider: .incidentIO)
+            }
+        }
+
+        // 4. Try status.io: look for statuspageId in HTML
+        if let _ = try? await discoverStatusIOPageID(domain: domain) {
+            let name = await fetchPageTitle(domain: domain) ?? domain
+            return DetectedService(name: name, provider: .statusIO)
+        }
+
+        throw URLError(.cannotParseResponse)
+    }
+
+    private func fetchPageTitle(domain: String) async -> String? {
+        guard let url = URL(string: "https://\(domain)") else { return nil }
+        guard let (data, _) = try? await session.data(from: url),
+              let html = String(data: data, encoding: .utf8) else { return nil }
+
+        // Extract <title>...</title>
+        guard let titleRange = html.range(of: #"<title[^>]*>([^<]+)</title>"#, options: .regularExpression) else {
+            return nil
+        }
+        let titleTag = String(html[titleRange])
+        // Strip the tags
+        let title = titleTag
+            .replacingOccurrences(of: #"<title[^>]*>"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: "</title>", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // Clean common suffixes like "Status", "Status Page", "- Status"
+        let cleaned = title
+            .replacingOccurrences(of: #"\s*[-–|·]\s*(Status|Status Page)$"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"\s+Status Page$"#, with: "", options: .regularExpression)
+            .replacingOccurrences(of: #"\s+Status$"#, with: "", options: .regularExpression)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        return cleaned.isEmpty ? nil : cleaned
+    }
+
     func fetchAll(services: [MonitoredService]) async -> [ServiceResult] {
         await withTaskGroup(of: ServiceResult.self, returning: [ServiceResult].self) { group in
             for service in services {
