@@ -71,6 +71,17 @@ final class StatusPollingService {
         isLoading = false
     }
 
+    func detectAndAddService(domain: String) async throws {
+        let detected = try await client.detectProvider(domain: domain)
+        let service = MonitoredService(
+            id: UUID(),
+            name: detected.name,
+            domain: domain,
+            provider: detected.provider
+        )
+        services.append(service)
+    }
+
     func sendTestNotification() {
         let content = UNMutableNotificationContent()
         content.title = "StatusBar"

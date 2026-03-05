@@ -27,9 +27,9 @@ struct SettingsView: View {
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var selectedTab = 0
-    @State private var newServiceName = ""
     @State private var newServiceDomain = ""
-    @State private var newServiceProvider: ServiceProvider = .statusPage
+    @State private var isDetecting = false
+    @State private var detectionError: String?
     @State private var launchAtLogin = SMAppService.mainApp.status == .enabled
 
     private let intervalOptions: [(label: String, value: TimeInterval)] = [
@@ -132,39 +132,35 @@ struct SettingsView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.secondary)
 
-            VStack(spacing: 10) {
-                // Row 1: Name + Provider
+            VStack(spacing: 8) {
                 HStack(spacing: 8) {
-                    formField("Name", text: $newServiceName)
-                        .frame(maxWidth: .infinity)
-
-                    Picker("", selection: $newServiceProvider) {
-                        Text("StatusPage").tag(ServiceProvider.statusPage)
-                        Text("incident.io").tag(ServiceProvider.incidentIO)
-                        Text("status.io").tag(ServiceProvider.statusIO)
-                        Text("Cachet").tag(ServiceProvider.cachet)
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                    .frame(width: 310)
-                }
-
-                // Row 2: Domain + Add button
-                HStack(spacing: 8) {
-                    formField("Domain (e.g. status.example.com)", text: $newServiceDomain)
+                    formField("Status page URL (e.g. status.example.com)", text: $newServiceDomain)
 
                     Button {
                         addService()
                     } label: {
-                        Image(systemName: "plus")
-                            .font(.body.weight(.medium))
-                            .frame(width: 30, height: 26)
-                            .background(overlay.opacity(newServiceName.isEmpty || newServiceDomain.isEmpty ? 0.04 : 0.12))
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                        Group {
+                            if isDetecting {
+                                ProgressView()
+                                    .controlSize(.small)
+                            } else {
+                                Image(systemName: "plus")
+                                    .font(.body.weight(.medium))
+                            }
+                        }
+                        .frame(width: 30, height: 26)
+                        .background(overlay.opacity(newServiceDomain.isEmpty || isDetecting ? 0.04 : 0.12))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
                     }
                     .buttonStyle(.plain)
-                    .disabled(newServiceName.isEmpty || newServiceDomain.isEmpty)
-                    .opacity(newServiceName.isEmpty || newServiceDomain.isEmpty ? 0.35 : 1)
+                    .disabled(newServiceDomain.isEmpty || isDetecting)
+                    .opacity(newServiceDomain.isEmpty || isDetecting ? 0.35 : 1)
+                }
+
+                if let error = detectionError {
+                    Text(error)
+                        .font(.caption)
+                        .foregroundStyle(.red)
                 }
             }
             .padding(10)
@@ -353,17 +349,21 @@ struct SettingsView: View {
             .replacingOccurrences(of: "http://", with: "")
             .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
 
-        let service = MonitoredService(
-            id: UUID(),
-            name: newServiceName.trimmingCharacters(in: .whitespaces),
-            domain: domain,
-            provider: newServiceProvider
-        )
-        withAnimation(.easeInOut(duration: 0.2)) {
-            pollingService.services.append(service)
+        guard !domain.isEmpty else { return }
+
+        isDetecting = true
+        detectionError = nil
+
+        Task {
+            do {
+                try await pollingService.detectAndAddService(domain: domain)
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    newServiceDomain = ""
+                }
+            } catch {
+                detectionError = "Could not detect status page provider for this URL."
+            }
+            isDetecting = false
         }
-        newServiceName = ""
-        newServiceDomain = ""
-        newServiceProvider = .statusPage
     }
 }
