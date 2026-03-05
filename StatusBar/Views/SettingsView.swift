@@ -142,10 +142,11 @@ struct SettingsView: View {
                         Text("StatusPage").tag(ServiceProvider.statusPage)
                         Text("incident.io").tag(ServiceProvider.incidentIO)
                         Text("status.io").tag(ServiceProvider.statusIO)
+                        Text("Cachet").tag(ServiceProvider.cachet)
                     }
                     .pickerStyle(.segmented)
                     .labelsHidden()
-                    .frame(width: 250)
+                    .frame(width: 310)
                 }
 
                 // Row 2: Domain + Add button

@@ -19,6 +19,8 @@ actor StatusClient {
             return await fetchIncidentIOSummary(for: service)
         case .statusIO:
             return await fetchStatusIOSummary(for: service)
+        case .cachet:
+            return await fetchCachetSummary(for: service)
         }
     }
 
@@ -253,6 +255,79 @@ actor StatusClient {
                 id: service.id,
                 service: service,
                 status: overallStatus,
+                statusDescription: description,
+                components: components,
+                error: nil
+            )
+        } catch is CancellationError {
+            return .error(service: service, message: "Request cancelled")
+        } catch let error as URLError {
+            return .error(service: service, message: error.localizedDescription)
+        } catch let error as DecodingError {
+            return .error(service: service, message: "Failed to parse response: \(error.localizedDescription)")
+        } catch {
+            return .error(service: service, message: error.localizedDescription)
+        }
+    }
+
+    // MARK: - Cachet (API v1)
+
+    private func fetchCachetSummary(for service: MonitoredService) async -> ServiceResult {
+        guard let url = service.apiURL else {
+            return .error(service: service, message: "Invalid URL for domain: \(service.domain)")
+        }
+
+        do {
+            let (data, response) = try await session.data(from: url)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return .error(service: service, message: "Invalid response")
+            }
+
+            guard (200...299).contains(httpResponse.statusCode) else {
+                return .error(service: service, message: "HTTP \(httpResponse.statusCode)")
+            }
+
+            let decoder = JSONDecoder()
+            let parsed = try decoder.decode(CachetGroupsResponse.self, from: data)
+
+            var components: [ComponentResult] = []
+            var worstStatus: OverallStatus = .operational
+
+            for group in parsed.data where group.visible == 1 {
+                // Add group header
+                components.append(ComponentResult(
+                    id: String(group.id),
+                    name: group.name,
+                    status: .operational,
+                    isGroup: true,
+                    onlyShowIfDegraded: false
+                ))
+
+                // Add each enabled component in the group
+                for component in group.enabledComponents where component.enabled {
+                    let status = OverallStatus(cachetStatus: component.status)
+                    if status > worstStatus {
+                        worstStatus = status
+                    }
+                    components.append(ComponentResult(
+                        id: String(component.id),
+                        name: component.name,
+                        status: status,
+                        isGroup: false,
+                        onlyShowIfDegraded: false
+                    ))
+                }
+            }
+
+            let description = worstStatus == .operational
+                ? "All Systems Operational"
+                : worstStatus.description
+
+            return ServiceResult(
+                id: service.id,
+                service: service,
+                status: worstStatus,
                 statusDescription: description,
                 components: components,
                 error: nil

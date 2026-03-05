@@ -72,6 +72,16 @@ enum OverallStatus: String, Comparable, Sendable {
         default: self = .unknown
         }
     }
+
+    init(cachetStatus: Int) {
+        switch cachetStatus {
+        case 1: self = .operational
+        case 2: self = .degradedPerformance
+        case 3: self = .partialOutage
+        case 4: self = .majorOutage
+        default: self = .unknown
+        }
+    }
 }
 
 struct ServiceResult: Identifiable, Sendable {

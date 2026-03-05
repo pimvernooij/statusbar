@@ -170,3 +170,34 @@ struct StatusIOMaintenance: Codable, Sendable {
 struct StatusIOMaintenanceEvent: Codable, Sendable {
     let name: String
 }
+
+// MARK: - Cachet API v1 Response Models
+
+struct CachetGroupsResponse: Codable, Sendable {
+    let data: [CachetGroup]
+}
+
+struct CachetGroup: Codable, Sendable {
+    let id: Int
+    let name: String
+    let visible: Int
+    let enabledComponents: [CachetComponent]
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, visible
+        case enabledComponents = "enabled_components"
+    }
+}
+
+struct CachetComponent: Codable, Sendable {
+    let id: Int
+    let name: String
+    let status: Int
+    let statusName: String
+    let enabled: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id, name, status, enabled
+        case statusName = "status_name"
+    }
+}
