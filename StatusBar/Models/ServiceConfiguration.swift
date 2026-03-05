@@ -3,6 +3,15 @@ import Foundation
 enum ServiceProvider: String, Codable, CaseIterable, Sendable {
     case statusPage
     case incidentIO
+    case statusIO
+
+    var displayName: String {
+        switch self {
+        case .statusPage: "StatusPage"
+        case .incidentIO: "incident.io"
+        case .statusIO: "status.io"
+        }
+    }
 }
 
 struct MonitoredService: Codable, Identifiable, Equatable, Sendable {
@@ -24,6 +33,10 @@ struct MonitoredService: Codable, Identifiable, Equatable, Sendable {
             URL(string: "https://\(domain)/api/v2/summary.json")
         case .incidentIO:
             URL(string: "https://\(domain)/proxy/\(domain)")
+        case .statusIO:
+            // status.io requires a statuspage ID discovered at runtime;
+            // the StatusClient handles URL construction for this provider.
+            nil
         }
     }
 
