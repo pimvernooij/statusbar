@@ -3,6 +3,7 @@ import Foundation
 actor StatusClient {
     private let session: URLSession
     private var statusIOPageIDs: [String: String] = [:]
+    private var uptimeRobotAPIPaths: [String: String] = [:]
 
     init() {
         let config = URLSessionConfiguration.default
@@ -21,6 +22,8 @@ actor StatusClient {
             return await fetchStatusIOSummary(for: service)
         case .cachet:
             return await fetchCachetSummary(for: service)
+        case .uptimeRobot:
+            return await fetchUptimeRobotSummary(for: service)
         }
     }
 
@@ -343,6 +346,112 @@ actor StatusClient {
         }
     }
 
+    // MARK: - UptimeRobot (Public Status Page API)
+
+    private func discoverUptimeRobotAPIPath(domain: String) async throws -> String {
+        if let cached = uptimeRobotAPIPaths[domain] {
+            return cached
+        }
+
+        guard let url = URL(string: "https://\(domain)") else {
+            throw URLError(.badURL)
+        }
+
+        let (data, _) = try await session.data(from: url)
+        guard let html = String(data: data, encoding: .utf8) else {
+            throw URLError(.cannotDecodeContentData)
+        }
+
+        // Look for: pspApiPath = 'https://domain/api/getMonitorList/PAGEID'
+        guard let range = html.range(of: #"pspApiPath\s*=\s*['\"]([^'\"]+)['\"]"#, options: .regularExpression) else {
+            throw URLError(.cannotParseResponse)
+        }
+
+        let match = String(html[range])
+        // Extract the URL between quotes
+        guard let urlRange = match.range(of: #"https?://[^'\"]+"#, options: .regularExpression) else {
+            throw URLError(.cannotParseResponse)
+        }
+
+        let apiPath = String(match[urlRange])
+        uptimeRobotAPIPaths[domain] = apiPath
+        return apiPath
+    }
+
+    private func fetchUptimeRobotSummary(for service: MonitoredService) async -> ServiceResult {
+        do {
+            let apiPath = try await discoverUptimeRobotAPIPath(domain: service.domain)
+            guard let url = URL(string: apiPath) else {
+                return .error(service: service, message: "Invalid UptimeRobot API URL")
+            }
+
+            let (data, response) = try await session.data(from: url)
+
+            guard let httpResponse = response as? HTTPURLResponse else {
+                return .error(service: service, message: "Invalid response")
+            }
+
+            guard (200...299).contains(httpResponse.statusCode) else {
+                return .error(service: service, message: "HTTP \(httpResponse.statusCode)")
+            }
+
+            let decoder = JSONDecoder()
+            let parsed = try decoder.decode(UptimeRobotResponse.self, from: data)
+
+            // Group monitors by groupName
+            let grouped = Dictionary(grouping: parsed.data, by: \.groupName)
+            var components: [ComponentResult] = []
+            var worstStatus: OverallStatus = .operational
+
+            for (groupName, monitors) in grouped.sorted(by: { $0.key < $1.key }) {
+                if grouped.count > 1 {
+                    components.append(ComponentResult(
+                        id: "group-\(groupName)",
+                        name: groupName,
+                        status: .operational,
+                        isGroup: true,
+                        onlyShowIfDegraded: false
+                    ))
+                }
+
+                for monitor in monitors {
+                    let status = OverallStatus(uptimeRobotStatusClass: monitor.statusClass)
+                    if status > worstStatus {
+                        worstStatus = status
+                    }
+                    components.append(ComponentResult(
+                        id: String(monitor.monitorId),
+                        name: monitor.name,
+                        status: status,
+                        isGroup: false,
+                        onlyShowIfDegraded: false
+                    ))
+                }
+            }
+
+            let description = worstStatus == .operational
+                ? "All Systems Operational"
+                : worstStatus.description
+
+            return ServiceResult(
+                id: service.id,
+                service: service,
+                status: worstStatus,
+                statusDescription: description,
+                components: components,
+                error: nil
+            )
+        } catch is CancellationError {
+            return .error(service: service, message: "Request cancelled")
+        } catch let error as URLError {
+            return .error(service: service, message: error.localizedDescription)
+        } catch let error as DecodingError {
+            return .error(service: service, message: "Failed to parse response: \(error.localizedDescription)")
+        } catch {
+            return .error(service: service, message: error.localizedDescription)
+        }
+    }
+
     // MARK: - Provider Auto-Detection
 
     struct DetectedService: Sendable {
@@ -382,7 +491,13 @@ actor StatusClient {
             }
         }
 
-        // 4. Try status.io: look for statuspageId in HTML
+        // 4. Try UptimeRobot: look for pspApiPath in HTML
+        if let _ = try? await discoverUptimeRobotAPIPath(domain: domain) {
+            let name = await fetchPageTitle(domain: domain) ?? domain
+            return DetectedService(name: name, provider: .uptimeRobot)
+        }
+
+        // 5. Try status.io: look for statuspageId in HTML
         if let _ = try? await discoverStatusIOPageID(domain: domain) {
             let name = await fetchPageTitle(domain: domain) ?? domain
             return DetectedService(name: name, provider: .statusIO)

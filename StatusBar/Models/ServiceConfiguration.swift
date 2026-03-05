@@ -5,6 +5,7 @@ enum ServiceProvider: String, Codable, CaseIterable, Sendable {
     case incidentIO
     case statusIO
     case cachet
+    case uptimeRobot
 
     var displayName: String {
         switch self {
@@ -12,6 +13,7 @@ enum ServiceProvider: String, Codable, CaseIterable, Sendable {
         case .incidentIO: "incident.io"
         case .statusIO: "status.io"
         case .cachet: "Cachet"
+        case .uptimeRobot: "UptimeRobot"
         }
     }
 }
@@ -41,6 +43,10 @@ struct MonitoredService: Codable, Identifiable, Equatable, Sendable {
             nil
         case .cachet:
             URL(string: "https://\(domain)/api/v1/components/groups")
+        case .uptimeRobot:
+            // UptimeRobot requires a page ID discovered at runtime;
+            // the StatusClient handles URL construction for this provider.
+            nil
         }
     }
 

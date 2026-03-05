@@ -82,6 +82,15 @@ enum OverallStatus: String, Comparable, Sendable {
         default: self = .unknown
         }
     }
+
+    init(uptimeRobotStatusClass: String) {
+        switch uptimeRobotStatusClass {
+        case "success": self = .operational
+        case "warning": self = .degradedPerformance
+        case "danger": self = .majorOutage
+        default: self = .unknown
+        }
+    }
 }
 
 struct ServiceResult: Identifiable, Sendable {
