@@ -2,6 +2,8 @@
 
 A lightweight macOS menu bar app that monitors cloud service status pages at a glance.
 
+![StatusBar Screenshot](assets/screenshot.png)
+
 StatusBar polls status page APIs from multiple providers, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details. Just enter a status page URL — the provider is auto-detected.
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue) ![Swift](https://img.shields.io/badge/Swift-5.9-orange) ![No Dependencies](https://img.shields.io/badge/dependencies-none-green)
