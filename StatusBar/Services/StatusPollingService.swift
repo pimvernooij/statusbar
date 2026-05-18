@@ -62,12 +62,27 @@ final class StatusPollingService {
 
     func refresh() async {
         isLoading = true
-        let fetchedResults = await client.fetchAll(services: services)
-        if !Task.isCancelled {
-            notifyStatusChanges(old: results, new: fetchedResults)
-            results = fetchedResults
-            lastUpdated = Date()
+        let currentServices = services
+        let oldResults = results
+        var partials: [UUID: ServiceResult] = [:]
+
+        await withTaskGroup(of: ServiceResult.self) { group in
+            for service in currentServices {
+                group.addTask { [client] in
+                    await client.fetchSummary(for: service)
+                }
+            }
+
+            for await result in group {
+                partials[result.id] = result
+                results = currentServices.compactMap { partials[$0.id] }
+            }
         }
+
+        let fetchedResults = currentServices.compactMap { partials[$0.id] }
+        notifyStatusChanges(old: oldResults, new: fetchedResults)
+        results = fetchedResults
+        lastUpdated = Date()
         isLoading = false
     }
 

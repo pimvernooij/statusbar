@@ -1,16 +1,8 @@
 import SwiftUI
 
-private struct ContentHeightKey: PreferenceKey {
-    static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-        value = nextValue()
-    }
-}
-
 struct StatusMenuView: View {
     let pollingService: StatusPollingService
     @Environment(\.openWindow) private var openWindow
-    @State private var contentHeight: CGFloat = 0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -41,24 +33,16 @@ struct StatusMenuView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 24)
             } else {
-                let maxHeight = (NSScreen.main?.visibleFrame.height ?? 800) - 120
-                ScrollView {
-                    VStack(spacing: 2) {
-                        ForEach(pollingService.results) { result in
-                            ServiceRowView(result: result)
-                            if result.id != pollingService.results.last?.id {
-                                Divider()
-                            }
+                VStack(spacing: 2) {
+                    ForEach(pollingService.results) { result in
+                        ServiceRowView(result: result)
+                        if result.id != pollingService.results.last?.id {
+                            Divider()
                         }
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(GeometryReader { geo in
-                        Color.clear.preference(key: ContentHeightKey.self, value: geo.size.height)
-                    })
                 }
-                .frame(height: contentHeight > 0 ? min(contentHeight, maxHeight) : nil)
-                .onPreferenceChange(ContentHeightKey.self) { contentHeight = $0 }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
             }
 
             Divider()

@@ -532,23 +532,4 @@ actor StatusClient {
         return cleaned.isEmpty ? nil : cleaned
     }
 
-    func fetchAll(services: [MonitoredService]) async -> [ServiceResult] {
-        await withTaskGroup(of: ServiceResult.self, returning: [ServiceResult].self) { group in
-            for service in services {
-                group.addTask {
-                    await self.fetchSummary(for: service)
-                }
-            }
-
-            var results: [ServiceResult] = []
-            for await result in group {
-                results.append(result)
-            }
-
-            // Sort results to match the order of input services
-            return services.compactMap { service in
-                results.first { $0.id == service.id }
-            }
-        }
-    }
 }
