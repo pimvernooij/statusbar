@@ -1,27 +1,41 @@
 # StatusBar
 
-A lightweight macOS menu bar app that monitors cloud service status pages at a glance.
+A lightweight macOS menu bar app that keeps an eye on the services and packages you depend on: cloud service status pages and security advisories (CVEs) for the ecosystems you follow.
 
 <img src="assets/screenshot.png" width="400" alt="StatusBar Screenshot">
 
-StatusBar polls status page APIs from multiple providers, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details. Just enter a status page URL — the provider is auto-detected.
+StatusBar does two things:
+
+- **Service status** — polls status page APIs from multiple providers and shows a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details. Just enter a status page URL; the provider is auto-detected.
+- **Security advisories** — follows ecosystems or specific packages (for example `npm: next, react` or `pip: certifi`) in the [GitHub Advisory Database](https://github.com/advisories) and lists recent high and critical advisories, with a notification when a new one appears.
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue) ![Swift](https://img.shields.io/badge/Swift-5.9-orange) ![No Dependencies](https://img.shields.io/badge/dependencies-none-green)
 
 ## Features
+
+### Service status
 
 - **Menu bar icon** that changes color based on overall status (green/yellow/orange/red/gray)
 - **Five provider types** — auto-detected from URL (StatusPage, incident.io, status.io, Cachet, UptimeRobot)
 - **Expandable service rows** with component-level breakdown
 - **Quick links** to open status pages in your browser
 - **Native notifications** when a service status changes (degradation or recovery)
-- **Security advisories** — follow ecosystems or specific packages (e.g. `npm: next, react`) and see high/critical advisories from the [GitHub Advisory Database](https://github.com/advisories) published in the last 7 days; choose per topic whether to follow high, critical or both
-- **Prioritized advisory notifications** — delivered as Time Sensitive so they can break through Focus (see [Security Advisories](#security-advisories))
 - **Configurable polling interval** (30s to 10 minutes)
 - **Add any supported status page** via Settings — just paste the URL
-- **Launch at Login** — optional, toggle in Settings
+
+### Security advisories
+
+- **Follow topics** — an ecosystem (npm, pip, Composer, Go, Maven, RubyGems, Rust, …), optionally narrowed to specific packages
+- **High and critical advisories** from the last 7 days per topic, with CVE/GHSA ID, affected package and how long ago it was published; click one to open it on GitHub
+- **Per-topic severity filter** — follow high, critical or both
+- **Prioritized notifications** — delivered as Time Sensitive so they can break through Focus (see [Notifications during Focus](#notifications-during-focus))
+- **No token needed** — uses the public GitHub Advisory Database API
+
+### General
+
 - **In-app updates** — checks GitHub Releases every 6 hours and shows an **Update** button in the dropdown that installs the new version and relaunches
-- **Test notification** button in Settings to verify notification permissions
+- **Launch at Login** — optional, toggle in Settings
+- **Test notification** buttons in Settings to verify notification permissions
 - **Translucent settings panel** with vibrancy background, adapts to light/dark mode
 - **Zero dependencies** — built entirely with system frameworks
 
@@ -76,9 +90,10 @@ xcodebuild -scheme StatusBar -destination 'platform=macOS' build
 ## Usage
 
 1. After launching, look for the status icon in your **menu bar** (top-right of screen)
-2. **Click** the icon to see service details
+2. **Click** the icon to see service status and, below it, your security advisory topics
 3. **Click** a service row to expand and see individual component statuses
-4. Open **Settings** to add/remove services, follow advisory topics, or change the refresh interval
+4. **Click** an advisory topic to see its high and critical advisories; click an advisory to open it on GitHub
+5. Open **Settings** to add/remove services (**Services**), follow advisory topics (**Advisories**), or change the refresh interval and check for updates (**General**)
 
 The app runs as a menu-bar-only app — it won't appear in the Dock.
 

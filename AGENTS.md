@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-StatusBar is a macOS menu bar application that monitors cloud service status pages via Atlassian StatusPage and incident.io JSON APIs, with native macOS notifications on status changes. Built with SwiftUI, targeting macOS 14+ (Sonoma).
+StatusBar is a macOS menu bar application with two functions: it monitors cloud service status pages (Atlassian StatusPage, incident.io, status.io, Cachet and UptimeRobot), and it follows security advisories for chosen ecosystems and packages via the GitHub Advisory Database. Both send native macOS notifications on changes. The app also updates itself from GitHub Releases. Built with SwiftUI, targeting macOS 14+ (Sonoma).
 
 ## Architecture
 
