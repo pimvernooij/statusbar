@@ -1,0 +1,3 @@
+# Only install package versions that have been published for at least 7 days,
+# so malicious releases are usually caught and unpublished before they reach us.
+minimumReleaseAge: 10080 # minutes
