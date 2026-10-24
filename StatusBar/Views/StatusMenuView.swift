@@ -3,10 +3,16 @@ import SwiftUI
 struct StatusMenuView: View {
     let pollingService: StatusPollingService
     let advisoryService: AdvisoryPollingService
+    let updateService: UpdateService
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            if let release = updateService.availableRelease {
+                UpdateBannerView(updateService: updateService, release: release)
+                Divider()
+            }
+
             // Header
             HStack {
                 Text("Service Status")

@@ -88,6 +88,12 @@ The app supports two provider types, both JSON-based:
 - Skip advisories with a non-null `withdrawn_at`. `cve_id` is often null at publish time; fall back to `ghsa_id`.
 - Advisory notifications use `interruptionLevel = .timeSensitive`. Builds are ad-hoc signed without the time-sensitive entitlement, so macOS downgrades them to regular notifications unless the app is allowed in the user's Focus.
 
+### Self-Update
+
+- `AppUpdater` reads `https://api.github.com/repos/pimvernooij/statusbar/releases/latest`, compares `tag_name` (`v1.4.0`) with `CFBundleShortVersionString`, and installs the first `.zip` asset. The release workflow must keep publishing `StatusBar-{version}.zip` containing `StatusBar.app`.
+- Builds are ad-hoc signed, so the download is verified by bundle identifier and version only. Keep `CFBundleShortVersionString` in sync with the release tag (`scripts/sync-version.sh`), or the update is rejected.
+- Downloads go through URLSession, which doesn't set `com.apple.quarantine`; the updater also strips it. Don't download updates via a browser or `NSWorkspace`, or Gatekeeper will block the relaunch.
+
 ### Testing & Verification
 
 - Build with `xcodebuild -scheme StatusBar -destination 'platform=macOS'`

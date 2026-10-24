@@ -20,6 +20,7 @@ StatusBar polls status page APIs from multiple providers, showing a colored icon
 - **Configurable polling interval** (30s to 10 minutes)
 - **Add any supported status page** via Settings — just paste the URL
 - **Launch at Login** — optional, toggle in Settings
+- **In-app updates** — checks GitHub Releases every 6 hours and shows an **Update** button in the dropdown that installs the new version and relaunches
 - **Test notification** button in Settings to verify notification permissions
 - **Translucent settings panel** with vibrancy background, adapts to light/dark mode
 - **Zero dependencies** — built entirely with system frameworks
@@ -112,6 +113,12 @@ Manage topics in **Settings → Advisories**: pick an ecosystem and optionally e
 
 Advisory notifications use the Time Sensitive interruption level. macOS only honors that for apps signed with the `com.apple.developer.usernotifications.time-sensitive` entitlement, which requires an Apple Developer team. Release builds are ad-hoc signed, so to receive advisories during Focus or Do Not Disturb, add StatusBar to the allowed apps of your Focus in **System Settings → Focus**.
 
+## Updates
+
+StatusBar checks the [latest GitHub release](https://github.com/pimvernooij/statusbar/releases/latest) at launch and every 6 hours (or via **Settings → General → Check Now**). When a newer version exists, a banner at the top of the dropdown offers **Update**: the app downloads the release zip, checks that it contains StatusBar with the expected version, replaces itself and relaunches.
+
+Release builds are not signed with a Developer ID. A copy downloaded with a browser is quarantined, so macOS asks you to allow it in **System Settings → Privacy & Security** — once per manually downloaded version. Updates installed with the Update button aren't quarantined and start without that prompt. If the app can't replace itself (for example when it lacks write permission to its folder), the banner links to the release for a manual download.
+
 ## Architecture
 
 - **SwiftUI** with `MenuBarExtra` (`.window` style for rich rendering)
@@ -121,6 +128,7 @@ Advisory notifications use the Time Sensitive interruption level. macOS only hon
 - **NSVisualEffectView** for translucent settings window
 - **UNUserNotificationCenter** for native macOS notifications on status changes and new advisories
 - **SMAppService** for launch-at-login support
+- **GitHub Releases API** + `ditto` for self-updating
 - **UserDefaults** for persistence
 
 ## Project Structure
@@ -136,11 +144,15 @@ StatusBar/
     AdvisoryTopic.swift             — Followed topic + ecosystem enum + defaults
     AdvisoryModels.swift            — Codable structs for the GitHub Advisory API
     AdvisoryResult.swift            — Advisory severity + result types
+    AppVersion.swift                — Comparable app/release version
+    ReleaseModels.swift             — Codable structs for the GitHub Releases API
   Services/
     StatusClient.swift              — Actor-based async API client + provider auto-detection
     StatusPollingService.swift      — Observable polling coordinator + notification dispatch
     AdvisoryClient.swift            — Actor-based GitHub Advisory Database client
     AdvisoryPollingService.swift    — Advisory polling, seen tracking + prioritized notifications
+    AppUpdater.swift                — Release check, download, verification + bundle replacement
+    UpdateService.swift             — Observable update state + periodic checks
   Views/
     StatusMenuView.swift            — Main dropdown content
     ServiceRowView.swift            — Expandable service row
@@ -150,6 +162,7 @@ StatusBar/
     AdvisoryRowView.swift           — Single advisory line with relative timestamp
     SettingsView.swift              — Translucent settings window
     AdvisorySettingsView.swift      — Advisories settings tab
+    UpdateBannerView.swift          — "Version x available" banner with Update button
   Utilities/
     MenuBarIconRenderer.swift       — Tinted SF Symbol for menu bar
     StatusColor.swift               — Status-to-color/label mapping
