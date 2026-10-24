@@ -24,6 +24,7 @@ private struct WindowConfigurator: NSViewRepresentable {
 
 struct SettingsView: View {
     @Bindable var pollingService: StatusPollingService
+    let advisoryService: AdvisoryPollingService
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var selectedTab = 0
@@ -50,7 +51,8 @@ struct SettingsView: View {
             // Custom tab bar
             HStack(spacing: 2) {
                 tabButton("Services", icon: "list.bullet", index: 0)
-                tabButton("General", icon: "gear", index: 1)
+                tabButton("Advisories", icon: "shield", index: 1)
+                tabButton("General", icon: "gear", index: 2)
             }
             .padding(3)
             .background(overlay.opacity(0.06))
@@ -60,10 +62,10 @@ struct SettingsView: View {
 
             // Tab content
             Group {
-                if selectedTab == 0 {
-                    servicesTab
-                } else {
-                    generalTab
+                switch selectedTab {
+                case 0: servicesTab
+                case 1: AdvisorySettingsView(advisoryService: advisoryService)
+                default: generalTab
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
