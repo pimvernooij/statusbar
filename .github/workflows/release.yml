@@ -30,13 +30,13 @@ jobs:
         id: changesets
         uses: changesets/action@v2
         with:
-          version: pnpm run version
+          version-script: pnpm run version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tag release when version PR merges
         id: tag
-        if: steps.changesets.outputs.hasChangesets == 'false'
+        if: steps.changesets.outputs.has-changesets == 'false'
         run: |
           VERSION=$(node -p "require('./package.json').version")
           # Pushes without changesets (docs, tooling) leave the version unchanged
