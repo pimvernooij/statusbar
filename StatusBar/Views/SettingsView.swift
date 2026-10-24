@@ -25,6 +25,7 @@ private struct WindowConfigurator: NSViewRepresentable {
 struct SettingsView: View {
     @Bindable var pollingService: StatusPollingService
     let advisoryService: AdvisoryPollingService
+    let updateService: UpdateService
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var selectedTab = 0
@@ -72,7 +73,7 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 16)
-        .frame(width: 500, height: 460)
+        .frame(width: 500, height: 520)
         .background(WindowConfigurator())
         .onAppear {
             // Dismiss the MenuBarExtra panel so it releases focus
@@ -304,8 +305,52 @@ struct SettingsView: View {
             }
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
+            Text("Updates")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
+
+            updatesRow
+
             Spacer()
         }
+    }
+
+    private var updatesRow: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Version \(updateService.currentVersion?.description ?? "unknown")")
+                    .font(.body)
+                Text(updateStatusText)
+                    .font(.caption)
+                    .foregroundStyle(updateService.checkError == nil ? Color.secondary : Color.red)
+            }
+            Spacer()
+            if updateService.isChecking {
+                ProgressView()
+                    .controlSize(.small)
+            } else {
+                Button("Check Now") {
+                    Task { await updateService.checkForUpdates() }
+                }
+                .font(.caption)
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .background(overlay.opacity(0.04))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+
+    private var updateStatusText: String {
+        if let error = updateService.checkError {
+            return "Update check failed: \(error)"
+        }
+        if let release = updateService.availableRelease {
+            return "Version \(release.version.description) is available — update from the menu"
+        }
+        guard let lastChecked = updateService.lastChecked else { return "Not checked yet" }
+        return "Up to date · checked \(lastChecked.formatted(.relative(presentation: .named)))"
     }
 
     private func toggleLaunchAtLogin() {

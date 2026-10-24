@@ -1,26 +1,41 @@
 # StatusBar
 
-A lightweight macOS menu bar app that monitors cloud service status pages at a glance.
+A lightweight macOS menu bar app that keeps an eye on the services and packages you depend on: cloud service status pages and security advisories (CVEs) for the ecosystems you follow.
 
 <img src="assets/screenshot.png" width="400" alt="StatusBar Screenshot">
 
-StatusBar polls status page APIs from multiple providers, showing a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details. Just enter a status page URL — the provider is auto-detected.
+StatusBar does two things:
+
+- **Service status** — polls status page APIs from multiple providers and shows a colored icon in your menu bar reflecting the worst status across all monitored services. Click it to see per-service and per-component details. Just enter a status page URL; the provider is auto-detected.
+- **Security advisories** — follows ecosystems or specific packages (for example `npm: next, react` or `pip: certifi`) in the [GitHub Advisory Database](https://github.com/advisories) and lists recent high and critical advisories, with a notification when a new one appears.
 
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue) ![Swift](https://img.shields.io/badge/Swift-5.9-orange) ![No Dependencies](https://img.shields.io/badge/dependencies-none-green)
 
 ## Features
+
+### Service status
 
 - **Menu bar icon** that changes color based on overall status (green/yellow/orange/red/gray)
 - **Five provider types** — auto-detected from URL (StatusPage, incident.io, status.io, Cachet, UptimeRobot)
 - **Expandable service rows** with component-level breakdown
 - **Quick links** to open status pages in your browser
 - **Native notifications** when a service status changes (degradation or recovery)
-- **Security advisories** — follow ecosystems or specific packages (e.g. `npm: next, react`) and see high/critical advisories from the [GitHub Advisory Database](https://github.com/advisories) published in the last 7 days; choose per topic whether to follow high, critical or both
-- **Prioritized advisory notifications** — delivered as Time Sensitive so they can break through Focus (see [Security Advisories](#security-advisories))
 - **Configurable polling interval** (30s to 10 minutes)
 - **Add any supported status page** via Settings — just paste the URL
+
+### Security advisories
+
+- **Follow topics** — an ecosystem (npm, pip, Composer, Go, Maven, RubyGems, Rust, …), optionally narrowed to specific packages
+- **High and critical advisories** from the last 7 days per topic, with CVE/GHSA ID, affected package and how long ago it was published; click one to open it on GitHub
+- **Per-topic severity filter** — follow high, critical or both
+- **Prioritized notifications** — delivered as Time Sensitive so they can break through Focus (see [Notifications during Focus](#notifications-during-focus))
+- **No token needed** — uses the public GitHub Advisory Database API
+
+### General
+
+- **In-app updates** — checks GitHub Releases every 6 hours and shows an **Update** button in the dropdown that installs the new version and relaunches
 - **Launch at Login** — optional, toggle in Settings
-- **Test notification** button in Settings to verify notification permissions
+- **Test notification** buttons in Settings to verify notification permissions
 - **Translucent settings panel** with vibrancy background, adapts to light/dark mode
 - **Zero dependencies** — built entirely with system frameworks
 
@@ -75,9 +90,10 @@ xcodebuild -scheme StatusBar -destination 'platform=macOS' build
 ## Usage
 
 1. After launching, look for the status icon in your **menu bar** (top-right of screen)
-2. **Click** the icon to see service details
+2. **Click** the icon to see service status and, below it, your security advisory topics
 3. **Click** a service row to expand and see individual component statuses
-4. Open **Settings** to add/remove services, follow advisory topics, or change the refresh interval
+4. **Click** an advisory topic to see its high and critical advisories; click an advisory to open it on GitHub
+5. Open **Settings** to add/remove services (**Services**), follow advisory topics (**Advisories**), or change the refresh interval and check for updates (**General**)
 
 The app runs as a menu-bar-only app — it won't appear in the Dock.
 
@@ -112,6 +128,12 @@ Manage topics in **Settings → Advisories**: pick an ecosystem and optionally e
 
 Advisory notifications use the Time Sensitive interruption level. macOS only honors that for apps signed with the `com.apple.developer.usernotifications.time-sensitive` entitlement, which requires an Apple Developer team. Release builds are ad-hoc signed, so to receive advisories during Focus or Do Not Disturb, add StatusBar to the allowed apps of your Focus in **System Settings → Focus**.
 
+## Updates
+
+StatusBar checks the [latest GitHub release](https://github.com/pimvernooij/statusbar/releases/latest) at launch and every 6 hours (or via **Settings → General → Check Now**). When a newer version exists, a banner at the top of the dropdown offers **Update**: the app downloads the release zip, checks that it contains StatusBar with the expected version, replaces itself and relaunches.
+
+Release builds are not signed with a Developer ID. A copy downloaded with a browser is quarantined, so macOS asks you to allow it in **System Settings → Privacy & Security** — once per manually downloaded version. Updates installed with the Update button aren't quarantined and start without that prompt. If the app can't replace itself (for example when it lacks write permission to its folder), the banner links to the release for a manual download.
+
 ## Architecture
 
 - **SwiftUI** with `MenuBarExtra` (`.window` style for rich rendering)
@@ -121,6 +143,7 @@ Advisory notifications use the Time Sensitive interruption level. macOS only hon
 - **NSVisualEffectView** for translucent settings window
 - **UNUserNotificationCenter** for native macOS notifications on status changes and new advisories
 - **SMAppService** for launch-at-login support
+- **GitHub Releases API** + `ditto` for self-updating
 - **UserDefaults** for persistence
 
 ## Project Structure
@@ -136,11 +159,15 @@ StatusBar/
     AdvisoryTopic.swift             — Followed topic + ecosystem enum + defaults
     AdvisoryModels.swift            — Codable structs for the GitHub Advisory API
     AdvisoryResult.swift            — Advisory severity + result types
+    AppVersion.swift                — Comparable app/release version
+    ReleaseModels.swift             — Codable structs for the GitHub Releases API
   Services/
     StatusClient.swift              — Actor-based async API client + provider auto-detection
     StatusPollingService.swift      — Observable polling coordinator + notification dispatch
     AdvisoryClient.swift            — Actor-based GitHub Advisory Database client
     AdvisoryPollingService.swift    — Advisory polling, seen tracking + prioritized notifications
+    AppUpdater.swift                — Release check, download, verification + bundle replacement
+    UpdateService.swift             — Observable update state + periodic checks
   Views/
     StatusMenuView.swift            — Main dropdown content
     ServiceRowView.swift            — Expandable service row
@@ -150,6 +177,7 @@ StatusBar/
     AdvisoryRowView.swift           — Single advisory line with relative timestamp
     SettingsView.swift              — Translucent settings window
     AdvisorySettingsView.swift      — Advisories settings tab
+    UpdateBannerView.swift          — "Version x available" banner with Update button
   Utilities/
     MenuBarIconRenderer.swift       — Tinted SF Symbol for menu bar
     StatusColor.swift               — Status-to-color/label mapping

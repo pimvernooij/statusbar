@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11805362BAA577423825720F /* ReleaseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36C9FF72F4E95F604CB100F8 /* ReleaseModels.swift */; };
 		21AE457E16243960F12B5FDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 107333A8792B819F2A7252F4 /* Assets.xcassets */; };
 		2FBD0B0BF9F8F0DB0D6EE1E4 /* AdvisoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5223D7C3220C3D7851F27689 /* AdvisoryClient.swift */; };
 		4FADE9E511155E5B1218F9DF /* AdvisoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2DD1D0268EB7556311240 /* AdvisoryModels.swift */; };
 		6DCCF967443E3101685ACF65 /* StatusIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCD5712A342CE0929CA2020 /* StatusIndicatorView.swift */; };
 		7292E705BAC1514041BB4AE5 /* AdvisoryTopicRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D037C56173C133783EAA7 /* AdvisoryTopicRowView.swift */; };
 		81E05886B2A3E0DE3592F316 /* AdvisoryPollingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECDB33F4AFD99A5C54CFD598 /* AdvisoryPollingService.swift */; };
+		899CA7DC7950E130B47DC465 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F887FCA0F7471A9CB6355EB /* UpdateService.swift */; };
 		8F663D1E57E851CA711E0E33 /* ComponentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A45503F41E20E224F950A9 /* ComponentRowView.swift */; };
 		918D3C36600D4D1876FCD50D /* StatusPageModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCC1A6084EDA0265F953179 /* StatusPageModels.swift */; };
 		925D4B2767344C339FBD2AC1 /* StatusBarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0572D30E6DC2A892839113 /* StatusBarApp.swift */; };
@@ -20,11 +22,14 @@
 		A15EF428F94A2E7D4666492F /* StatusClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664C2BF1C9F4FBFBAC84C174 /* StatusClient.swift */; };
 		A4666872E9A515DCB7C69BDF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0626B80F9AAA0716D22F05C5 /* SettingsView.swift */; };
 		A8D9DC2828284EB5D3CB1DF1 /* AdvisoryStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 256C5B35CD2C6FC9B8CD2F65 /* AdvisoryStyle.swift */; };
+		B3A77C388B4AEBD8BB04F74B /* AppUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B8A30FD97AA39BD3942CC4 /* AppUpdater.swift */; };
 		B915040166317255C3C80C19 /* AdvisoryTopic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263726377DBE6AE4BD6B8F89 /* AdvisoryTopic.swift */; };
 		BA30282D90E84BD5FF0AC2A2 /* StatusColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425468CE938B06D3AFE46501 /* StatusColor.swift */; };
 		D23EE1C39DBD33D53E8EFB5D /* AdvisorySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 62F4BA923CE2A76C1828C15F /* AdvisorySettingsView.swift */; };
+		D2AB4719BCC57D5B7FECAF76 /* UpdateBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F69581399A032EB6B5CC3B4 /* UpdateBannerView.swift */; };
 		D3B551842DCE4801968630BE /* StatusPollingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3943ADED9B5C91840ED8AA78 /* StatusPollingService.swift */; };
 		DBF3A95E8D361E57044D084D /* ServiceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B51CA57739F57B74E16BB54 /* ServiceConfiguration.swift */; };
+		DF4AA5AC9F2BE2E086CC4997 /* AppVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37DAC3D27B63651CBD7B1A8 /* AppVersion.swift */; };
 		E467C10FA5A153173982FD1E /* StatusMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD745C71D3B2EB1FE1EB599 /* StatusMenuView.swift */; };
 		F3E73842136E36C79DBABB62 /* AdvisoryRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7981F7EE85D32C6B76AF3A /* AdvisoryRowView.swift */; };
 		F926CB287BDEF1BE9BB541E1 /* MenuBarIconRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E8EB60E69D4E9C41242FCC /* MenuBarIconRenderer.swift */; };
@@ -42,10 +47,13 @@
 		2D0D037C56173C133783EAA7 /* AdvisoryTopicRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryTopicRowView.swift; sourceTree = "<group>"; };
 		2FCC1A6084EDA0265F953179 /* StatusPageModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPageModels.swift; sourceTree = "<group>"; };
 		2FD745C71D3B2EB1FE1EB599 /* StatusMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusMenuView.swift; sourceTree = "<group>"; };
+		36C9FF72F4E95F604CB100F8 /* ReleaseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReleaseModels.swift; sourceTree = "<group>"; };
 		3943ADED9B5C91840ED8AA78 /* StatusPollingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPollingService.swift; sourceTree = "<group>"; };
 		3B51CA57739F57B74E16BB54 /* ServiceConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceConfiguration.swift; sourceTree = "<group>"; };
 		425468CE938B06D3AFE46501 /* StatusColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusColor.swift; sourceTree = "<group>"; };
 		5223D7C3220C3D7851F27689 /* AdvisoryClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryClient.swift; sourceTree = "<group>"; };
+		5F69581399A032EB6B5CC3B4 /* UpdateBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateBannerView.swift; sourceTree = "<group>"; };
+		5F887FCA0F7471A9CB6355EB /* UpdateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateService.swift; sourceTree = "<group>"; };
 		60C2DD1D0268EB7556311240 /* AdvisoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryModels.swift; sourceTree = "<group>"; };
 		62F4BA923CE2A76C1828C15F /* AdvisorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisorySettingsView.swift; sourceTree = "<group>"; };
 		65E8EB60E69D4E9C41242FCC /* MenuBarIconRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconRenderer.swift; sourceTree = "<group>"; };
@@ -53,11 +61,13 @@
 		8E7981F7EE85D32C6B76AF3A /* AdvisoryRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryRowView.swift; sourceTree = "<group>"; };
 		96A45503F41E20E224F950A9 /* ComponentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentRowView.swift; sourceTree = "<group>"; };
 		A31BF3564D16937B5035C8DA /* StatusBar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StatusBar.entitlements; sourceTree = "<group>"; };
+		C37DAC3D27B63651CBD7B1A8 /* AppVersion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersion.swift; sourceTree = "<group>"; };
 		C5F50B9C1DE295CDD00DA3E2 /* AdvisoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryResult.swift; sourceTree = "<group>"; };
 		CA0572D30E6DC2A892839113 /* StatusBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarApp.swift; sourceTree = "<group>"; };
 		CBCD5712A342CE0929CA2020 /* StatusIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIndicatorView.swift; sourceTree = "<group>"; };
 		ECDB33F4AFD99A5C54CFD598 /* AdvisoryPollingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryPollingService.swift; sourceTree = "<group>"; };
 		F21BDE8A8730B69DDC0C9120 /* StatusBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StatusBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6B8A30FD97AA39BD3942CC4 /* AppUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdater.swift; sourceTree = "<group>"; };
 		F94547032776F26AF7888971 /* ServiceRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,6 +109,8 @@
 				60C2DD1D0268EB7556311240 /* AdvisoryModels.swift */,
 				C5F50B9C1DE295CDD00DA3E2 /* AdvisoryResult.swift */,
 				263726377DBE6AE4BD6B8F89 /* AdvisoryTopic.swift */,
+				C37DAC3D27B63651CBD7B1A8 /* AppVersion.swift */,
+				36C9FF72F4E95F604CB100F8 /* ReleaseModels.swift */,
 				3B51CA57739F57B74E16BB54 /* ServiceConfiguration.swift */,
 				23970C06D1EFB54D2DE050AD /* ServiceStatus.swift */,
 				2FCC1A6084EDA0265F953179 /* StatusPageModels.swift */,
@@ -127,6 +139,7 @@
 				0626B80F9AAA0716D22F05C5 /* SettingsView.swift */,
 				CBCD5712A342CE0929CA2020 /* StatusIndicatorView.swift */,
 				2FD745C71D3B2EB1FE1EB599 /* StatusMenuView.swift */,
+				5F69581399A032EB6B5CC3B4 /* UpdateBannerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -144,8 +157,10 @@
 			children = (
 				5223D7C3220C3D7851F27689 /* AdvisoryClient.swift */,
 				ECDB33F4AFD99A5C54CFD598 /* AdvisoryPollingService.swift */,
+				F6B8A30FD97AA39BD3942CC4 /* AppUpdater.swift */,
 				664C2BF1C9F4FBFBAC84C174 /* StatusClient.swift */,
 				3943ADED9B5C91840ED8AA78 /* StatusPollingService.swift */,
+				5F887FCA0F7471A9CB6355EB /* UpdateService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -229,8 +244,11 @@
 				A8D9DC2828284EB5D3CB1DF1 /* AdvisoryStyle.swift in Sources */,
 				B915040166317255C3C80C19 /* AdvisoryTopic.swift in Sources */,
 				7292E705BAC1514041BB4AE5 /* AdvisoryTopicRowView.swift in Sources */,
+				B3A77C388B4AEBD8BB04F74B /* AppUpdater.swift in Sources */,
+				DF4AA5AC9F2BE2E086CC4997 /* AppVersion.swift in Sources */,
 				8F663D1E57E851CA711E0E33 /* ComponentRowView.swift in Sources */,
 				F926CB287BDEF1BE9BB541E1 /* MenuBarIconRenderer.swift in Sources */,
+				11805362BAA577423825720F /* ReleaseModels.swift in Sources */,
 				DBF3A95E8D361E57044D084D /* ServiceConfiguration.swift in Sources */,
 				FE7DFC00F317D55348923B9F /* ServiceRowView.swift in Sources */,
 				A0E8BF099636582C0FF9696D /* ServiceStatus.swift in Sources */,
@@ -242,6 +260,8 @@
 				E467C10FA5A153173982FD1E /* StatusMenuView.swift in Sources */,
 				918D3C36600D4D1876FCD50D /* StatusPageModels.swift in Sources */,
 				D3B551842DCE4801968630BE /* StatusPollingService.swift in Sources */,
+				D2AB4719BCC57D5B7FECAF76 /* UpdateBannerView.swift in Sources */,
+				899CA7DC7950E130B47DC465 /* UpdateService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

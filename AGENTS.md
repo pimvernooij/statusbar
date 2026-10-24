@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-StatusBar is a macOS menu bar application that monitors cloud service status pages via Atlassian StatusPage and incident.io JSON APIs, with native macOS notifications on status changes. Built with SwiftUI, targeting macOS 14+ (Sonoma).
+StatusBar is a macOS menu bar application with two functions: it monitors cloud service status pages (Atlassian StatusPage, incident.io, status.io, Cachet and UptimeRobot), and it follows security advisories for chosen ecosystems and packages via the GitHub Advisory Database. Both send native macOS notifications on changes. The app also updates itself from GitHub Releases. Built with SwiftUI, targeting macOS 14+ (Sonoma).
 
 ## Architecture
 
@@ -87,6 +87,12 @@ The app supports two provider types, both JSON-based:
 - `severity` accepts a single value, so each followed severity of a topic is a separate request. Don't drop the severity filter and filter client-side: npm and pip exceed 100 reviewed advisories per week.
 - Skip advisories with a non-null `withdrawn_at`. `cve_id` is often null at publish time; fall back to `ghsa_id`.
 - Advisory notifications use `interruptionLevel = .timeSensitive`. Builds are ad-hoc signed without the time-sensitive entitlement, so macOS downgrades them to regular notifications unless the app is allowed in the user's Focus.
+
+### Self-Update
+
+- `AppUpdater` reads `https://api.github.com/repos/pimvernooij/statusbar/releases/latest`, compares `tag_name` (`v1.4.0`) with `CFBundleShortVersionString`, and installs the first `.zip` asset. The release workflow must keep publishing `StatusBar-{version}.zip` containing `StatusBar.app`.
+- Builds are ad-hoc signed, so the download is verified by bundle identifier and version only. Keep `CFBundleShortVersionString` in sync with the release tag (`scripts/sync-version.sh`), or the update is rejected.
+- Downloads go through URLSession, which doesn't set `com.apple.quarantine`; the updater also strips it. Don't download updates via a browser or `NSWorkspace`, or Gatekeeper will block the relaunch.
 
 ### Testing & Verification
 
