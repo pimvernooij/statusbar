@@ -80,6 +80,14 @@ The app supports two provider types, both JSON-based:
 - Component statuses: `operational`, `degraded_performance`, `partial_outage`, `full_outage`
 - Groups can be `hidden` — skip these. Components within groups can also be `hidden`.
 
+### Security Advisories (GitHub Advisory Database)
+
+- Endpoint: `https://api.github.com/advisories?type=reviewed&ecosystem={eco}&severity={sev}&affects={pkgs}&published=>={date}`
+- Public, no auth; limited to 60 requests/hour per IP. Conditional (`If-None-Match`) 304 responses still count against this limit.
+- `severity` accepts a single value, so each followed severity of a topic is a separate request. Don't drop the severity filter and filter client-side: npm and pip exceed 100 reviewed advisories per week.
+- Skip advisories with a non-null `withdrawn_at`. `cve_id` is often null at publish time; fall back to `ghsa_id`.
+- Advisory notifications use `interruptionLevel = .timeSensitive`. Builds are ad-hoc signed without the time-sensitive entitlement, so macOS downgrades them to regular notifications unless the app is allowed in the user's Focus.
+
 ### Testing & Verification
 
 - Build with `xcodebuild -scheme StatusBar -destination 'platform=macOS'`

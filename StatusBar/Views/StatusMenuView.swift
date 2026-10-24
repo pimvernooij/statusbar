@@ -2,6 +2,7 @@ import SwiftUI
 
 struct StatusMenuView: View {
     let pollingService: StatusPollingService
+    let advisoryService: AdvisoryPollingService
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -45,6 +46,11 @@ struct StatusMenuView: View {
                 .padding(.vertical, 8)
             }
 
+            if !advisoryService.topics.isEmpty {
+                Divider()
+                advisorySection
+            }
+
             Divider()
 
             // Footer
@@ -57,6 +63,7 @@ struct StatusMenuView: View {
                 Spacer()
                 Button("Refresh") {
                     Task { await pollingService.refresh() }
+                    Task { await advisoryService.refresh() }
                 }
                 .buttonStyle(.plain)
                 .font(.caption)
@@ -86,5 +93,41 @@ struct StatusMenuView: View {
             .padding(.vertical, 8)
         }
         .frame(width: 340)
+    }
+
+    private var advisorySection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                Text("Security Advisories")
+                    .font(.headline)
+                Spacer()
+                if advisoryService.isLoading {
+                    ProgressView()
+                        .controlSize(.small)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 10)
+            .padding(.bottom, 4)
+
+            if advisoryService.results.isEmpty {
+                Text("Loading advisories...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            } else {
+                VStack(spacing: 2) {
+                    ForEach(advisoryService.results) { result in
+                        AdvisoryTopicRowView(result: result)
+                        if result.id != advisoryService.results.last?.id {
+                            Divider()
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
+            }
+        }
     }
 }
