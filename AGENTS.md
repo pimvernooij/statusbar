@@ -84,7 +84,7 @@ The app supports two provider types, both JSON-based:
 
 - Build with `xcodebuild -scheme StatusBar -destination 'platform=macOS'`
 - Verify menu bar icon appears and reflects correct status
-- Test with live APIs: status.claude.com (StatusPage), eu.githubstatus.com (StatusPage), status.openai.com (incident.io)
+- Test with live APIs: status.claude.com (StatusPage), www.githubstatus.com (StatusPage), status.openai.com (incident.io)
 - Verify Settings window opens and persists changes
 - Test error states: disable network, use invalid domains
 

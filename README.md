@@ -27,7 +27,7 @@ StatusBar polls status page APIs from multiple providers, showing a colored icon
 | Service | Domain | Provider |
 |---------|--------|----------|
 | Claude | status.claude.com | StatusPage |
-| GitHub | eu.githubstatus.com | StatusPage |
+| GitHub | www.githubstatus.com | StatusPage |
 | OpenAI | status.openai.com | incident.io |
 | Vercel | www.vercel-status.com | StatusPage |
 
@@ -83,7 +83,7 @@ The app runs as a menu-bar-only app — it won't appear in the Dock.
 
 | Provider | Example | Detection |
 |----------|---------|-----------|
-| [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) | status.claude.com, eu.githubstatus.com | `/api/v2/summary.json` |
+| [Atlassian StatusPage](https://www.atlassian.com/software/statuspage) | status.claude.com, www.githubstatus.com | `/api/v2/summary.json` |
 | [incident.io](https://incident.io) | status.openai.com | `/proxy/{domain}` |
 | [status.io](https://status.io) | status.commercetools.com | `statuspageId` in HTML |
 | [Cachet](https://github.com/CachetHQ/Cachet) | status.bluestonepim.com | `/api/v1/components/groups` |
