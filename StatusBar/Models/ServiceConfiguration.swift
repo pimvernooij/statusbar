@@ -56,7 +56,7 @@ struct MonitoredService: Codable, Identifiable, Equatable, Sendable {
 
     static let defaults: [MonitoredService] = [
         MonitoredService(id: UUID(), name: "Claude", domain: "status.claude.com"),
-        MonitoredService(id: UUID(), name: "GitHub", domain: "eu.githubstatus.com"),
+        MonitoredService(id: UUID(), name: "GitHub", domain: "www.githubstatus.com"),
         MonitoredService(id: UUID(), name: "OpenAI", domain: "status.openai.com", provider: .incidentIO),
         MonitoredService(id: UUID(), name: "Vercel", domain: "www.vercel-status.com"),
     ]
