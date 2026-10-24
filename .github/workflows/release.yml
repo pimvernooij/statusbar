@@ -15,20 +15,20 @@ jobs:
       should-publish: ${{ steps.tag.outputs.published }}
       version: ${{ steps.tag.outputs.version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
 
       - name: Create version PR or tag release
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@v2
         with:
           version: pnpm run version
         env:
@@ -39,6 +39,11 @@ jobs:
         if: steps.changesets.outputs.hasChangesets == 'false'
         run: |
           VERSION=$(node -p "require('./package.json').version")
+          # Pushes without changesets (docs, tooling) leave the version unchanged
+          if git ls-remote --exit-code --tags origin "refs/tags/v${VERSION}" >/dev/null; then
+            echo "v${VERSION} is already released"
+            exit 0
+          fi
           git tag "v${VERSION}"
           git push origin "v${VERSION}"
           echo "published=true" >> "$GITHUB_OUTPUT"
@@ -49,7 +54,7 @@ jobs:
     if: needs.version.outputs.should-publish == 'true'
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: v${{ needs.version.outputs.version }}
 

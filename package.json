@@ -2,11 +2,11 @@
   "name": "statusbar",
   "version": "1.5.0",
   "private": true,
-  "packageManager": "pnpm@9.15.4",
+  "packageManager": "pnpm@12.15.0",
   "scripts": {
     "version": "changeset version && ./scripts/sync-version.sh"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.0"
+    "@changesets/cli": "^3.0.3"
   }
 }

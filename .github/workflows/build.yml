@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Build
         run: |
@@ -25,7 +25,7 @@ jobs:
             StatusBar.zip
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: StatusBar
           path: StatusBar.zip
