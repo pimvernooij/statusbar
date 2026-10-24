@@ -102,6 +102,12 @@ The app supports two provider types, both JSON-based:
 - Verify Settings window opens and persists changes
 - Test error states: disable network, use invalid domains
 
+### CI & Supply Chain
+
+- Pin GitHub Actions to a full commit SHA with the version as a comment (`uses: actions/checkout@<sha> # v7.0.1`). Dependabot (`.github/dependabot.yml`) keeps the pins current.
+- `pnpm-workspace.yaml` sets `minimumReleaseAge` to 7 days: pnpm refuses package versions younger than that, also when they are already in the lockfile. Dependabot uses the same 7-day `cooldown`.
+- Changesets/release tooling is the only npm dependency; the app itself has none.
+
 ### Documentation
 
 - Always update `README.md` when making significant changes (new features, renamed files, architecture changes). Keep the Features list, Architecture section, and Project Structure tree in sync with the codebase.
