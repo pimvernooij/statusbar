@@ -1,5 +1,15 @@
 # statusbar
 
+## 1.4.0
+
+### Minor Changes
+
+- 9bfce00: Add security advisory monitoring. Follow an ecosystem or specific packages (for example `npm: next, react`) and the dropdown lists high and critical advisories from the GitHub Advisory Database published in the last 7 days, with relative timestamps and links to GitHub. Each topic can follow high, critical or both. New advisories trigger Time Sensitive notifications. Topics, check interval and notifications are managed in a new Advisories settings tab.
+
+### Patch Changes
+
+- 2f136a8: Change the default GitHub service from `eu.githubstatus.com` to `www.githubstatus.com`. The EU page covers GitHub Enterprise Cloud with EU data residency (GHE.com), which has moved off Atlassian StatusPage and now returns 404 on `/api/v2/summary.json`; `www.githubstatus.com` reports status for github.com.
+
 ## 1.3.1
 
 ### Patch Changes
