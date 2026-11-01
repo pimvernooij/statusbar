@@ -5,6 +5,8 @@ struct StatusMenuView: View {
     let advisoryService: AdvisoryPollingService
     let updateService: UpdateService
     @Environment(\.openWindow) private var openWindow
+    /// IDs of the expanded service and advisory topic rows.
+    @State private var expandedIDs: Set<UUID> = []
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -29,33 +31,17 @@ struct StatusMenuView: View {
 
             Divider()
 
-            // Service list
-            if pollingService.results.isEmpty {
-                VStack(spacing: 8) {
-                    ProgressView()
-                    Text("Loading status...")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 24)
-            } else {
-                VStack(spacing: 2) {
-                    ForEach(pollingService.results) { result in
-                        ServiceRowView(result: result)
-                        if result.id != pollingService.results.last?.id {
-                            Divider()
-                        }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    serviceSection
+
+                    if !advisoryService.topics.isEmpty {
+                        Divider()
+                        advisorySection
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
             }
-
-            if !advisoryService.topics.isEmpty {
-                Divider()
-                advisorySection
-            }
+            .frame(height: min(contentHeight, MenuMetrics.maxScrollHeight))
 
             Divider()
 
@@ -83,6 +69,9 @@ struct StatusMenuView: View {
             HStack {
                 Button("Settings...") {
                     openWindow(id: "settings")
+                    // onAppear doesn't run when the window is already open, and a
+                    // menu bar app isn't active by default, so bring it forward here
+                    NSApp.activate()
                 }
                 .buttonStyle(.plain)
                 .font(.caption)
@@ -101,6 +90,78 @@ struct StatusMenuView: View {
         .frame(width: 340)
     }
 
+    /// Height of the scrolling content, calculated from the fixed row heights.
+    private var contentHeight: CGFloat {
+        var height = serviceSectionHeight
+        if !advisoryService.topics.isEmpty {
+            height += MenuMetrics.dividerHeight + advisorySectionHeight
+        }
+        return height
+    }
+
+    private var serviceSectionHeight: CGFloat {
+        let results = pollingService.results
+        guard !results.isEmpty else { return Self.loadingHeight }
+        let rows = results.reduce(0) { total, result in
+            total + ServiceRowView.height(for: result, isExpanded: expandedIDs.contains(result.id))
+        }
+        return rows
+            + CGFloat(results.count - 1) * MenuMetrics.dividerHeight
+            + MenuMetrics.listVerticalPadding * 2
+    }
+
+    private var advisorySectionHeight: CGFloat {
+        let results = advisoryService.results
+        guard !results.isEmpty else { return MenuMetrics.sectionHeaderHeight + Self.loadingAdvisoriesHeight }
+        let rows = results.reduce(0) { total, result in
+            total + AdvisoryTopicRowView.height(for: result, isExpanded: expandedIDs.contains(result.id))
+        }
+        return MenuMetrics.sectionHeaderHeight
+            + rows
+            + CGFloat(results.count - 1) * MenuMetrics.dividerHeight
+            + MenuMetrics.listVerticalPadding
+    }
+
+    private static let loadingHeight: CGFloat = 96
+    private static let loadingAdvisoriesHeight: CGFloat = 40
+
+    private func isExpanded(_ id: UUID) -> Binding<Bool> {
+        Binding {
+            expandedIDs.contains(id)
+        } set: { expanded in
+            if expanded {
+                expandedIDs.insert(id)
+            } else {
+                expandedIDs.remove(id)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var serviceSection: some View {
+        if pollingService.results.isEmpty {
+            VStack(spacing: 8) {
+                ProgressView()
+                Text("Loading status...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: Self.loadingHeight)
+        } else {
+            VStack(spacing: 0) {
+                ForEach(pollingService.results) { result in
+                    ServiceRowView(result: result, isExpanded: isExpanded(result.id))
+                    if result.id != pollingService.results.last?.id {
+                        Divider()
+                    }
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, MenuMetrics.listVerticalPadding)
+        }
+    }
+
     private var advisorySection: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
@@ -113,26 +174,25 @@ struct StatusMenuView: View {
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.top, 10)
-            .padding(.bottom, 4)
+            .frame(height: MenuMetrics.sectionHeaderHeight)
 
             if advisoryService.results.isEmpty {
                 Text("Loading advisories...")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
+                    .frame(height: Self.loadingAdvisoriesHeight)
             } else {
-                VStack(spacing: 2) {
+                VStack(spacing: 0) {
                     ForEach(advisoryService.results) { result in
-                        AdvisoryTopicRowView(result: result)
+                        AdvisoryTopicRowView(result: result, isExpanded: isExpanded(result.id))
                         if result.id != advisoryService.results.last?.id {
                             Divider()
                         }
                     }
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 8)
+                .padding(.bottom, MenuMetrics.listVerticalPadding)
             }
         }
     }

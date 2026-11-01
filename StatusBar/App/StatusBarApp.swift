@@ -22,6 +22,7 @@ struct StatusBarApp: App {
         Window("", id: "settings") {
             SettingsView(pollingService: pollingService, advisoryService: advisoryService, updateService: updateService)
         }
+        .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
     }
 }

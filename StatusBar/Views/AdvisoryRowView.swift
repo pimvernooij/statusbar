@@ -21,8 +21,7 @@ struct AdvisoryRowView: View {
                     Text(advisory.summary)
                         .font(.caption)
                         .foregroundStyle(.primary)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
+                        .lineLimit(1)
                     details
                 }
                 Spacer(minLength: 0)

@@ -59,7 +59,7 @@ struct Advisory: Identifiable, Sendable {
 struct AdvisoryTopicResult: Identifiable, Sendable {
     let id: UUID
     let topic: AdvisoryTopic
-    /// High and critical advisories, newest first.
+    /// Followed advisories: critical before high, newest first within a severity.
     let advisories: [Advisory]
     let error: String?
 

@@ -2,15 +2,28 @@ import SwiftUI
 
 struct AdvisoryTopicRowView: View {
     let result: AdvisoryTopicResult
-    @State private var isExpanded = false
+    @Binding var isExpanded: Bool
 
-    /// Rows shown inline; a ScrollView collapses to zero height inside MenuBarExtra,
-    /// so long lists are truncated instead.
-    private static let maxVisibleAdvisories = 8
+    /// Total height of the row, used to size the scrolling part of the dropdown.
+    static func height(for result: AdvisoryTopicResult, isExpanded: Bool) -> CGFloat {
+        guard isExpanded else { return MenuMetrics.topicRowHeight }
+        return MenuMetrics.topicRowHeight
+            + listHeight(for: result)
+            + (result.topic.webURL == nil ? 0 : MenuMetrics.linkRowHeight)
+    }
+
+    private static func listHeight(for result: AdvisoryTopicResult) -> CGFloat {
+        guard !result.advisories.isEmpty else { return MenuMetrics.componentRowHeight }
+        return MenuMetrics.expandedListHeight(
+            rowCount: result.advisories.count,
+            rowHeight: MenuMetrics.advisoryRowHeight
+        )
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 0) {
             header
+                .frame(height: MenuMetrics.topicRowHeight)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -20,6 +33,7 @@ struct AdvisoryTopicRowView: View {
 
             if isExpanded {
                 advisoryList
+                    .frame(height: Self.listHeight(for: result))
 
                 if let url = result.topic.webURL {
                     Button {
@@ -34,11 +48,10 @@ struct AdvisoryTopicRowView: View {
                     }
                     .buttonStyle(.plain)
                     .padding(.leading, 24)
-                    .padding(.top, 2)
+                    .frame(height: MenuMetrics.linkRowHeight)
                 }
             }
         }
-        .padding(.vertical, 4)
     }
 
     private var header: some View {
@@ -82,15 +95,12 @@ struct AdvisoryTopicRowView: View {
                 .foregroundStyle(.tertiary)
                 .padding(.leading, 24)
         } else {
-            VStack(alignment: .leading, spacing: 6) {
-                ForEach(result.advisories.prefix(Self.maxVisibleAdvisories)) { advisory in
-                    AdvisoryRowView(advisory: advisory)
-                }
-                let hidden = result.advisories.count - Self.maxVisibleAdvisories
-                if hidden > 0 {
-                    Text("+\(hidden) more")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(result.advisories) { advisory in
+                        AdvisoryRowView(advisory: advisory)
+                            .frame(height: MenuMetrics.advisoryRowHeight, alignment: .top)
+                    }
                 }
             }
             .padding(.leading, 24)

@@ -12,6 +12,7 @@
 		2FBD0B0BF9F8F0DB0D6EE1E4 /* AdvisoryClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5223D7C3220C3D7851F27689 /* AdvisoryClient.swift */; };
 		4FADE9E511155E5B1218F9DF /* AdvisoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C2DD1D0268EB7556311240 /* AdvisoryModels.swift */; };
 		6DCCF967443E3101685ACF65 /* StatusIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCD5712A342CE0929CA2020 /* StatusIndicatorView.swift */; };
+		729018A346886DF0BA9E6FA8 /* MenuMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BDFD335D50A730C5B587A4 /* MenuMetrics.swift */; };
 		7292E705BAC1514041BB4AE5 /* AdvisoryTopicRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0D037C56173C133783EAA7 /* AdvisoryTopicRowView.swift */; };
 		81E05886B2A3E0DE3592F316 /* AdvisoryPollingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECDB33F4AFD99A5C54CFD598 /* AdvisoryPollingService.swift */; };
 		899CA7DC7950E130B47DC465 /* UpdateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F887FCA0F7471A9CB6355EB /* UpdateService.swift */; };
@@ -65,6 +66,7 @@
 		C5F50B9C1DE295CDD00DA3E2 /* AdvisoryResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryResult.swift; sourceTree = "<group>"; };
 		CA0572D30E6DC2A892839113 /* StatusBarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarApp.swift; sourceTree = "<group>"; };
 		CBCD5712A342CE0929CA2020 /* StatusIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusIndicatorView.swift; sourceTree = "<group>"; };
+		D8BDFD335D50A730C5B587A4 /* MenuMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuMetrics.swift; sourceTree = "<group>"; };
 		ECDB33F4AFD99A5C54CFD598 /* AdvisoryPollingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvisoryPollingService.swift; sourceTree = "<group>"; };
 		F21BDE8A8730B69DDC0C9120 /* StatusBar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StatusBar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6B8A30FD97AA39BD3942CC4 /* AppUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUpdater.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			children = (
 				256C5B35CD2C6FC9B8CD2F65 /* AdvisoryStyle.swift */,
 				65E8EB60E69D4E9C41242FCC /* MenuBarIconRenderer.swift */,
+				D8BDFD335D50A730C5B587A4 /* MenuMetrics.swift */,
 				425468CE938B06D3AFE46501 /* StatusColor.swift */,
 			);
 			path = Utilities;
@@ -248,6 +251,7 @@
 				DF4AA5AC9F2BE2E086CC4997 /* AppVersion.swift in Sources */,
 				8F663D1E57E851CA711E0E33 /* ComponentRowView.swift in Sources */,
 				F926CB287BDEF1BE9BB541E1 /* MenuBarIconRenderer.swift in Sources */,
+				729018A346886DF0BA9E6FA8 /* MenuMetrics.swift in Sources */,
 				11805362BAA577423825720F /* ReleaseModels.swift in Sources */,
 				DBF3A95E8D361E57044D084D /* ServiceConfiguration.swift in Sources */,
 				FE7DFC00F317D55348923B9F /* ServiceRowView.swift in Sources */,

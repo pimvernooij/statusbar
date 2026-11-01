@@ -9,8 +9,10 @@ private struct WindowConfigurator: NSViewRepresentable {
         let view = NSView()
         DispatchQueue.main.async {
             guard let window = view.window else { return }
-            window.alphaValue = 0.9
             window.level = .floating
+            // Let the VisualEffectBackground show what's behind the window
+            window.isOpaque = false
+            window.backgroundColor = .clear
             window.standardWindowButton(.miniaturizeButton)?.isHidden = true
             window.standardWindowButton(.zoomButton)?.isHidden = true
         }
@@ -18,6 +20,21 @@ private struct WindowConfigurator: NSViewRepresentable {
     }
 
     func updateNSView(_ nsView: NSView, context: Context) {}
+}
+
+/// Blurred, translucent window background. Unlike `NSWindow.alphaValue`, this keeps
+/// text and controls fully opaque.
+private struct VisualEffectBackground: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSVisualEffectView {
+        let view = NSVisualEffectView()
+        view.material = .hudWindow
+        view.blendingMode = .behindWindow
+        // Keep the effect when the window isn't key; it floats above other apps
+        view.state = .active
+        return view
+    }
+
+    func updateNSView(_ nsView: NSVisualEffectView, context: Context) {}
 }
 
 // MARK: - Settings View
@@ -73,14 +90,23 @@ struct SettingsView: View {
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 16)
-        .frame(width: 500, height: 520)
+        .frame(width: 500, height: 560)
+        .background {
+            ZStack {
+                VisualEffectBackground()
+                // The material alone is too light over bright windows for readable
+                // text, so tint it to keep contrast independent of what's behind
+                (colorScheme == .dark ? Color.black : Color.white).opacity(0.55)
+            }
+            .ignoresSafeArea()
+        }
         .background(WindowConfigurator())
         .onAppear {
             // Dismiss the MenuBarExtra panel so it releases focus
             for window in NSApp.windows where window is NSPanel {
                 window.close()
             }
-            NSApp.activate(ignoringOtherApps: true)
+            NSApp.activate()
         }
     }
 
@@ -102,6 +128,7 @@ struct SettingsView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 6))
         }
         .buttonStyle(.plain)
+        .focusEffectDisabled()
         .foregroundStyle(selectedTab == index ? .primary : .secondary)
     }
 
@@ -198,7 +225,7 @@ struct SettingsView: View {
                         .foregroundStyle(.tertiary)
                     Text(service.provider.displayName)
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
+                        .foregroundStyle(.secondary)
                 }
             }
             Spacer()
@@ -209,7 +236,7 @@ struct SettingsView: View {
             } label: {
                 Image(systemName: "trash")
                     .font(.caption)
-                    .foregroundStyle(.red.opacity(0.7))
+                    .foregroundStyle(.red)
                     .padding(6)
                     .background(overlay.opacity(0.05))
                     .clipShape(RoundedRectangle(cornerRadius: 5))

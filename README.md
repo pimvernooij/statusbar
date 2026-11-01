@@ -17,7 +17,7 @@ StatusBar does two things:
 
 - **Menu bar icon** that changes color based on overall status (green/yellow/orange/red/gray)
 - **Five provider types** — auto-detected from URL (StatusPage, incident.io, status.io, Cachet, UptimeRobot)
-- **Expandable service rows** with component-level breakdown
+- **Expandable service rows** with component-level breakdown; long lists scroll inside the row
 - **Quick links** to open status pages in your browser
 - **Native notifications** when a service status changes (degradation or recovery)
 - **Configurable polling interval** (30s to 10 minutes)
@@ -26,7 +26,7 @@ StatusBar does two things:
 ### Security advisories
 
 - **Follow topics** — an ecosystem (npm, pip, Composer, Go, Maven, RubyGems, Rust, …), optionally narrowed to specific packages
-- **High and critical advisories** from the last 7 days per topic, with CVE/GHSA ID, affected package and how long ago it was published; click one to open it on GitHub
+- **High and critical advisories** from the last 7 days per topic, critical first, with CVE/GHSA ID, affected package and how long ago it was published; click one to open it on GitHub
 - **Per-topic severity filter** — follow high, critical or both
 - **Prioritized notifications** — delivered as Time Sensitive so they can break through Focus (see [Notifications during Focus](#notifications-during-focus))
 - **No token needed** — uses the public GitHub Advisory Database API
@@ -36,7 +36,7 @@ StatusBar does two things:
 - **In-app updates** — checks GitHub Releases every 6 hours and shows an **Update** button in the dropdown that installs the new version and relaunches
 - **Launch at Login** — optional, toggle in Settings
 - **Test notification** buttons in Settings to verify notification permissions
-- **Translucent settings panel** with vibrancy background, adapts to light/dark mode
+- **Translucent settings window** with a blurred background that floats above other windows and adapts to light/dark mode
 - **Zero dependencies** — built entirely with system frameworks
 
 ## Default Services
@@ -140,8 +140,8 @@ Release builds are not signed with a Developer ID. A copy downloaded with a brow
 - **Swift Observation** (`@Observable`) for reactive state
 - **Actor-based** API client for thread-safe networking
 - **Structured concurrency** — `TaskGroup` for parallel fetching, `Task.sleep` for polling
-- **NSVisualEffectView** for translucent settings window
 - **UNUserNotificationCenter** for native macOS notifications on status changes and new advisories
+- **NSVisualEffectView** for the translucent settings window
 - **SMAppService** for launch-at-login support
 - **GitHub Releases API** + `ditto` for self-updating
 - **UserDefaults** for persistence
@@ -181,6 +181,7 @@ StatusBar/
   Utilities/
     MenuBarIconRenderer.swift       — Tinted SF Symbol for menu bar
     StatusColor.swift               — Status-to-color/label mapping
+    MenuMetrics.swift               — Fixed row heights + scroll height calculation for the dropdown
     AdvisoryStyle.swift             — Severity-to-color/symbol mapping
 ```
 
