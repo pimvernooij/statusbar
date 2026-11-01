@@ -26,9 +26,7 @@ struct AdvisoryTopicRowView: View {
                 .frame(height: MenuMetrics.topicRowHeight)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    withAnimation(.easeInOut(duration: 0.2)) {
-                        isExpanded.toggle()
-                    }
+                    isExpanded.toggle()
                 }
 
             if isExpanded {
@@ -83,6 +81,7 @@ struct AdvisoryTopicRowView: View {
             Image(systemName: "chevron.right")
                 .font(.caption2)
                 .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                .animation(.easeInOut(duration: 0.2), value: isExpanded)
                 .foregroundStyle(.tertiary)
         }
     }
