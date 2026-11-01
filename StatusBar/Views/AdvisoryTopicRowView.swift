@@ -103,6 +103,7 @@ struct AdvisoryTopicRowView: View {
                     }
                 }
             }
+            .scrollIndicators(.automatic)
             .padding(.leading, 24)
         }
     }

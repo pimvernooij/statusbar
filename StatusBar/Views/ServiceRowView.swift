@@ -94,6 +94,7 @@ struct ServiceRowView: View {
                     }
                 }
             }
+            .scrollIndicators(.automatic)
         }
     }
 }

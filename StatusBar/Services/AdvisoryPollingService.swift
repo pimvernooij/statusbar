@@ -80,7 +80,9 @@ final class AdvisoryPollingService {
     func refresh() async {
         isLoading = true
         let currentTopics = topics
-        var partials: [UUID: AdvisoryTopicResult] = [:]
+        // Start from the previous results so rows stay in place while fetching;
+        // the dropdown's height follows the row count.
+        var partials = Dictionary(results.map { ($0.id, $0) }) { _, new in new }
 
         await withTaskGroup(of: AdvisoryTopicResult.self) { group in
             for topic in currentTopics {
