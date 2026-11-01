@@ -33,7 +33,7 @@ struct UpdateBannerView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 10)
+        .frame(height: MenuMetrics.updateBannerHeight)
         .background(Color.blue.opacity(0.08))
     }
 

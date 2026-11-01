@@ -104,6 +104,7 @@ The app supports two provider types, both JSON-based:
 
 ### CI & Supply Chain
 
+- CI builds on `macos-26`. Behavior can depend on the SDK an app is built with, so a passing local build doesn't prove the released app works: for UI changes, also test the build artifact from CI.
 - Pin GitHub Actions to a full commit SHA with the version as a comment (`uses: actions/checkout@<sha> # v7.0.1`). Dependabot (`.github/dependabot.yml`) keeps the pins current.
 - `pnpm-workspace.yaml` sets `minimumReleaseAge` to 7 days: pnpm refuses package versions younger than that, also when they are already in the lockfile. Dependabot uses the same 7-day `cooldown`.
 - Changesets/release tooling is the only npm dependency; the app itself has none.

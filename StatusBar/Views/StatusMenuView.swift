@@ -26,8 +26,7 @@ struct StatusMenuView: View {
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.top, 12)
-            .padding(.bottom, 8)
+            .frame(height: MenuMetrics.headerHeight)
 
             Divider()
 
@@ -67,7 +66,7 @@ struct StatusMenuView: View {
                 .foregroundStyle(.blue)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .frame(height: MenuMetrics.footerRowHeight)
 
             Divider()
 
@@ -90,9 +89,22 @@ struct StatusMenuView: View {
                 .foregroundStyle(.primary)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .frame(height: MenuMetrics.footerRowHeight)
         }
-        .frame(width: 340)
+        .frame(width: 340, height: panelHeight)
+        .background(PanelHeightSetter(height: panelHeight))
+    }
+
+    /// Total height of the panel: the pinned rows plus the scrolling content.
+    private var panelHeight: CGFloat {
+        var height = MenuMetrics.headerHeight
+            + MenuMetrics.footerRowHeight * 2
+            + MenuMetrics.dividerHeight * 3
+            + min(contentHeight, MenuMetrics.maxScrollHeight)
+        if updateService.availableRelease != nil {
+            height += MenuMetrics.updateBannerHeight + MenuMetrics.dividerHeight
+        }
+        return height
     }
 
     /// Height of the scrolling content, calculated from the fixed row heights.

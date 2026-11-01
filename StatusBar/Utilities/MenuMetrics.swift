@@ -11,6 +11,9 @@ enum MenuMetrics {
     static let linkRowHeight: CGFloat = 24
     static let sectionHeaderHeight: CGFloat = 36
     static let dividerHeight: CGFloat = 1
+    static let headerHeight: CGFloat = 38
+    static let footerRowHeight: CGFloat = 30
+    static let updateBannerHeight: CGFloat = 62
     static let listVerticalPadding: CGFloat = 8
 
     /// Upper bound for one expanded list; longer lists scroll inside the row.
