@@ -1,5 +1,11 @@
 # statusbar
 
+## 1.5.3
+
+### Patch Changes
+
+- 3e0887f: Fix the dropdown not resizing in released builds. Expanding a row left the panel at its old height, which cut off the content. The app now sets the panel height itself, and releases are built with the macOS 26 SDK.
+
 ## 1.5.2
 
 ### Patch Changes
