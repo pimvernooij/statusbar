@@ -2,49 +2,37 @@ import SwiftUI
 
 struct ServiceRowView: View {
     let result: ServiceResult
-    @State private var isExpanded = false
+    @Binding var isExpanded: Bool
+
+    /// Total height of the row, used to size the scrolling part of the dropdown.
+    static func height(for result: ServiceResult, isExpanded: Bool) -> CGFloat {
+        guard isExpanded else { return MenuMetrics.serviceRowHeight }
+        return MenuMetrics.serviceRowHeight
+            + listHeight(for: result)
+            + (result.service.pageURL == nil ? 0 : MenuMetrics.linkRowHeight)
+    }
+
+    private static func listHeight(for result: ServiceResult) -> CGFloat {
+        MenuMetrics.expandedListHeight(
+            rowCount: max(result.visibleComponents.count, 1),
+            rowHeight: MenuMetrics.componentRowHeight
+        )
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                StatusIndicatorView(status: result.status)
-                Text(result.service.name)
-                    .font(.body.weight(.medium))
-                Spacer()
-                if let error = result.error {
-                    Text(error)
-                        .font(.caption2)
-                        .foregroundStyle(.red)
-                        .lineLimit(1)
-                } else {
-                    Text(StatusColor.label(for: result.status))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .rotationEffect(.degrees(isExpanded ? 90 : 0))
-                    .foregroundStyle(.tertiary)
-            }
-            .contentShape(Rectangle())
-            .onTapGesture {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    isExpanded.toggle()
-                }
-            }
-
-            if isExpanded {
-                let visible = result.visibleComponents
-                if visible.isEmpty {
-                    Text("No component details available")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                        .padding(.leading, 24)
-                } else {
-                    ForEach(visible) { component in
-                        ComponentRowView(component: component)
+        VStack(alignment: .leading, spacing: 0) {
+            header
+                .frame(height: MenuMetrics.serviceRowHeight)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isExpanded.toggle()
                     }
                 }
+
+            if isExpanded {
+                componentList
+                    .frame(height: Self.listHeight(for: result))
 
                 if let url = result.service.pageURL {
                     Button {
@@ -59,10 +47,53 @@ struct ServiceRowView: View {
                     }
                     .buttonStyle(.plain)
                     .padding(.leading, 24)
-                    .padding(.top, 2)
+                    .frame(height: MenuMetrics.linkRowHeight)
                 }
             }
         }
-        .padding(.vertical, 4)
+    }
+
+    private var header: some View {
+        HStack {
+            StatusIndicatorView(status: result.status)
+            Text(result.service.name)
+                .font(.body.weight(.medium))
+                .lineLimit(1)
+            Spacer()
+            if let error = result.error {
+                Text(error)
+                    .font(.caption2)
+                    .foregroundStyle(.red)
+                    .lineLimit(1)
+            } else {
+                Text(StatusColor.label(for: result.status))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Image(systemName: "chevron.right")
+                .font(.caption2)
+                .rotationEffect(.degrees(isExpanded ? 90 : 0))
+                .foregroundStyle(.tertiary)
+        }
+    }
+
+    @ViewBuilder
+    private var componentList: some View {
+        let visible = result.visibleComponents
+        if visible.isEmpty {
+            Text("No component details available")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
+                .padding(.leading, 24)
+        } else {
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(visible) { component in
+                        ComponentRowView(component: component)
+                            .frame(height: MenuMetrics.componentRowHeight)
+                    }
+                }
+            }
+        }
     }
 }

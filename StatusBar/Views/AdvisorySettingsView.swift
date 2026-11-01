@@ -61,7 +61,7 @@ struct AdvisorySettingsView: View {
             } label: {
                 Image(systemName: "trash")
                     .font(.caption)
-                    .foregroundStyle(.red.opacity(0.7))
+                    .foregroundStyle(.red)
                     .padding(6)
                     .background(overlay.opacity(0.05))
                     .clipShape(RoundedRectangle(cornerRadius: 5))

@@ -58,7 +58,9 @@ actor AdvisoryClient {
             return AdvisoryTopicResult(
                 id: topic.id,
                 topic: topic,
-                advisories: advisories.sorted { $0.publishedAt > $1.publishedAt },
+                advisories: advisories.sorted {
+                    $0.severity != $1.severity ? $0.severity > $1.severity : $0.publishedAt > $1.publishedAt
+                },
                 error: nil
             )
         } catch is CancellationError {

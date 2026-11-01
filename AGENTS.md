@@ -116,6 +116,8 @@ The app supports two provider types, both JSON-based:
 
 - Forgetting `isTemplate = false` on menu bar `NSImage` - icons will appear monochrome
 - Using `.menu` style MenuBarExtra and wondering why custom views don't render
+- Scrolling in the dropdown: a `ScrollView` needs an explicit `.frame(height:)` or it collapses to zero, and `ViewThatFits` or `GeometryReader` measurement leaves the panel blank on macOS 26. Give rows fixed heights and calculate scroll heights with `MenuMetrics`; update the row's `height(for:isExpanded:)` when its layout changes
+- Making a window translucent with `NSWindow.alphaValue`: that also fades text and controls. Use `NSVisualEffectView` as the background
 - Not filtering group components from the StatusPage API response
 - Using `@ObservedObject`/`@StateObject` instead of the Observation framework on macOS 14+
 - Force-unwrapping URLs - use `guard let` or provide fallback

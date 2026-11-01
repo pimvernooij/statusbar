@@ -231,11 +231,12 @@ actor StatusClient {
                     onlyShowIfDegraded: false
                 ))
 
-                // Add each container (region) as a child component
+                // Add each container (region) as a child component. Containers are
+                // shared between components, so their IDs and names aren't unique.
                 for container in component.containers {
                     components.append(ComponentResult(
-                        id: container.id,
-                        name: container.name,
+                        id: "\(component.id)-\(container.id)",
+                        name: "\(component.name) · \(container.name)",
                         status: OverallStatus(statusIOCode: container.statusCode),
                         isGroup: false,
                         onlyShowIfDegraded: false
