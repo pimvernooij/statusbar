@@ -41,6 +41,11 @@ struct StatusMenuView: View {
                     }
                 }
             }
+            // While the panel animates to a new height the content briefly overflows,
+            // so base the indicator on the calculated height instead of the live one.
+            // Expanded lists opt back in; this also applies to nested scroll views.
+            .scrollIndicators(contentHeight > MenuMetrics.maxScrollHeight ? .automatic : .never)
+            .scrollBounceBehavior(.basedOnSize)
             .frame(height: min(contentHeight, MenuMetrics.maxScrollHeight))
 
             Divider()

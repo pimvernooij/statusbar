@@ -64,7 +64,9 @@ final class StatusPollingService {
         isLoading = true
         let currentServices = services
         let oldResults = results
-        var partials: [UUID: ServiceResult] = [:]
+        // Start from the previous results so rows stay in place while fetching;
+        // the dropdown's height follows the row count.
+        var partials = Dictionary(oldResults.map { ($0.id, $0) }) { _, new in new }
 
         await withTaskGroup(of: ServiceResult.self) { group in
             for service in currentServices {
