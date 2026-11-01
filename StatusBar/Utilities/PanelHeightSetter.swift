@@ -2,8 +2,8 @@ import AppKit
 import SwiftUI
 
 /// Sizes the MenuBarExtra panel to `height`, keeping its top edge under the menu bar.
-/// The panel doesn't reliably follow SwiftUI's size in builds made with the macOS 15
-/// SDK, which leaves the content clipped or surrounded by empty space.
+/// The panel doesn't always follow SwiftUI's size (it didn't in builds made with the
+/// macOS 15 SDK), which leaves the content clipped or surrounded by empty space.
 struct PanelHeightSetter: NSViewRepresentable {
     let height: CGFloat
 
