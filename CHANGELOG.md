@@ -1,5 +1,14 @@
 # statusbar
 
+## 1.5.1
+
+### Patch Changes
+
+- 86eb896: Make the settings window readable. The whole window was 10% transparent, so whatever was behind it showed through the text. It now uses a blurred translucent background with fully opaque text and controls, and opening Settings from the dropdown also brings an already open window forward.
+- 86eb896: Keep the dropdown on screen. Long lists now scroll inside their row and the panel scrolls when it would exceed the screen height, so an expanded service such as Vercel can always be collapsed again. Critical advisories are listed above high ones, and all advisories of a topic can be reached instead of the first 8.
+  
+  Show which component each status.io region belongs to, for example `Composable Commerce: APIs · Europe (AWS)`. Regions are shared between components, so the list could show the same name several times.
+
 ## 1.5.0
 
 ### Minor Changes
