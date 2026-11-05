@@ -31,6 +31,12 @@ StatusBar does two things:
 - **Prioritized notifications** — delivered as Time Sensitive so they can break through Focus (see [Notifications during Focus](#notifications-during-focus))
 - **No token needed** — uses the public GitHub Advisory Database API
 
+### Global incidents
+
+- **Large, widespread incidents** such as runtime RCEs (Node.js, PHP), compromised certificate authorities and kernel bugs, which package advisories don't cover. Powered by [Cloudflare Radar Zero Wire](https://radar.cloudflare.com/security/zero-wire)
+- Briefings from the last 30 days, the ones that need attention first, each with its recommended action (e.g. "Prioritize patching.")
+- **Prioritized notification** when a new briefing needs attention; can be turned off in **Settings → Advisories**
+
 ### General
 
 - **In-app updates** — checks GitHub Releases every 6 hours and shows an **Update** button in the dropdown that installs the new version and relaunches
@@ -128,6 +134,13 @@ Manage topics in **Settings → Advisories**: pick an ecosystem and optionally e
 
 Advisory notifications use the Time Sensitive interruption level. macOS only honors that for apps signed with the `com.apple.developer.usernotifications.time-sensitive` entitlement, which requires an Apple Developer team. Release builds are ad-hoc signed, so to receive advisories during Focus or Do Not Disturb, add StatusBar to the allowed apps of your Focus in **System Settings → Focus**.
 
+## Global Incidents
+
+The first row of the **Security Advisories** section, **Global incidents**, lists briefings from Cloudflare Radar's [Zero Wire](https://radar.cloudflare.com/security/zero-wire) feed: urgent vulnerabilities and threats with a broad impact, published a few times a month. They cover what package advisories miss, such as a vulnerable runtime or a compromised certificate authority.
+
+- Data comes from the public RSS feed `https://radar.cloudflare.com/security/zero-wire/rss`, checked every 30 minutes.
+- Each briefing has a status (**Needs attention** or **Reference**). New briefings that need attention trigger a Time Sensitive notification; briefings present when the app first loads the feed don't.
+
 ## Updates
 
 StatusBar checks the [latest GitHub release](https://github.com/pimvernooij/statusbar/releases/latest) at launch and every 6 hours (or via **Settings → General → Check Now**). When a newer version exists, a banner at the top of the dropdown offers **Update**: the app downloads the release zip, checks that it contains StatusBar with the expected version, replaces itself and relaunches.
@@ -160,6 +173,7 @@ StatusBar/
     AdvisoryModels.swift            — Codable structs for the GitHub Advisory API
     AdvisoryResult.swift            — Advisory severity + result types
     AppVersion.swift                — Comparable app/release version
+    GlobalIncident.swift            — Cloudflare Zero Wire briefing
     ReleaseModels.swift             — Codable structs for the GitHub Releases API
   Services/
     StatusClient.swift              — Actor-based async API client + provider auto-detection
@@ -167,6 +181,9 @@ StatusBar/
     AdvisoryClient.swift            — Actor-based GitHub Advisory Database client
     AdvisoryPollingService.swift    — Advisory polling, seen tracking + prioritized notifications
     AppUpdater.swift                — Release check, download, verification + bundle replacement
+    RSSFeedParser.swift             — Minimal RSS 2.0 parser (XMLParser)
+    GlobalIncidentClient.swift      — Actor-based Zero Wire feed client
+    GlobalIncidentService.swift     — Global incident polling, seen tracking + notifications
     UpdateService.swift             — Observable update state + periodic checks
   Views/
     StatusMenuView.swift            — Main dropdown content
@@ -178,6 +195,8 @@ StatusBar/
     SettingsView.swift              — Translucent settings window
     AdvisorySettingsView.swift      — Advisories settings tab
     UpdateBannerView.swift          — "Version x available" banner with Update button
+    GlobalIncidentRowView.swift     — Expandable "Global incidents" row
+    GlobalIncidentItemView.swift    — Single briefing line with action and relative timestamp
   Utilities/
     MenuBarIconRenderer.swift       — Tinted SF Symbol for menu bar
     StatusColor.swift               — Status-to-color/label mapping

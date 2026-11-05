@@ -88,6 +88,13 @@ The app supports two provider types, both JSON-based:
 - Skip advisories with a non-null `withdrawn_at`. `cve_id` is often null at publish time; fall back to `ghsa_id`.
 - Advisory notifications use `interruptionLevel = .timeSensitive`. Builds are ad-hoc signed without the time-sensitive entitlement, so macOS downgrades them to regular notifications unless the app is allowed in the user's Focus.
 
+### Global Incidents (Cloudflare Radar Zero Wire)
+
+- Feed: `https://radar.cloudflare.com/security/zero-wire/rss` (RSS 2.0, public, `Cache-Control: max-age=300`). Shown in the UI as "Global incidents · powered by Cloudflare"; don't use the name Zero Wire in the UI.
+- Each item has several `<category>` elements: the first is the status (`Needs attention` or `Reference`), the rest are tags (CVE IDs, technologies).
+- `guid` contains a date (`node2shell@2026-10-25`) and may change when a briefing is updated, so the item link is used as the ID for seen tracking.
+- Parse with Foundation's `XMLParser` (`RSSFeedParser`); no dependencies.
+
 ### Self-Update
 
 - `AppUpdater` reads `https://api.github.com/repos/pimvernooij/statusbar/releases/latest`, compares `tag_name` (`v1.4.0`) with `CFBundleShortVersionString`, and installs the first `.zip` asset. The release workflow must keep publishing `StatusBar-{version}.zip` containing `StatusBar.app`.

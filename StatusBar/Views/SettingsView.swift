@@ -42,6 +42,7 @@ private struct VisualEffectBackground: NSViewRepresentable {
 struct SettingsView: View {
     @Bindable var pollingService: StatusPollingService
     let advisoryService: AdvisoryPollingService
+    let incidentService: GlobalIncidentService
     let updateService: UpdateService
     @Environment(\.colorScheme) private var colorScheme
 
@@ -82,7 +83,7 @@ struct SettingsView: View {
             Group {
                 switch selectedTab {
                 case 0: servicesTab
-                case 1: AdvisorySettingsView(advisoryService: advisoryService)
+                case 1: AdvisorySettingsView(advisoryService: advisoryService, incidentService: incidentService)
                 default: generalTab
                 }
             }

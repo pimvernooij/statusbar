@@ -7,10 +7,16 @@ struct StatusBarApp: App {
     @State private var pollingService = StatusPollingService()
     @State private var advisoryService = AdvisoryPollingService()
     @State private var updateService = UpdateService()
+    @State private var incidentService = GlobalIncidentService()
 
     var body: some Scene {
         MenuBarExtra {
-            StatusMenuView(pollingService: pollingService, advisoryService: advisoryService, updateService: updateService)
+            StatusMenuView(
+                pollingService: pollingService,
+                advisoryService: advisoryService,
+                incidentService: incidentService,
+                updateService: updateService
+            )
         } label: {
             let status = pollingService.worstStatus
             Image(systemName: StatusColor.sfSymbolName(for: status))
@@ -20,7 +26,12 @@ struct StatusBarApp: App {
         .menuBarExtraStyle(.window)
 
         Window("", id: "settings") {
-            SettingsView(pollingService: pollingService, advisoryService: advisoryService, updateService: updateService)
+            SettingsView(
+                pollingService: pollingService,
+                advisoryService: advisoryService,
+                incidentService: incidentService,
+                updateService: updateService
+            )
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
