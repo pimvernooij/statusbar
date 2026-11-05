@@ -3,6 +3,7 @@ import SwiftUI
 struct StatusMenuView: View {
     let pollingService: StatusPollingService
     let advisoryService: AdvisoryPollingService
+    let incidentService: GlobalIncidentService
     let updateService: UpdateService
     @Environment(\.openWindow) private var openWindow
     /// IDs of the expanded service and advisory topic rows.
@@ -33,11 +34,8 @@ struct StatusMenuView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     serviceSection
-
-                    if !advisoryService.topics.isEmpty {
-                        Divider()
-                        advisorySection
-                    }
+                    Divider()
+                    advisorySection
                 }
             }
             // While the panel animates to a new height the content briefly overflows,
@@ -60,6 +58,7 @@ struct StatusMenuView: View {
                 Button("Refresh") {
                     Task { await pollingService.refresh() }
                     Task { await advisoryService.refresh() }
+                    Task { await incidentService.refresh() }
                 }
                 .buttonStyle(.plain)
                 .font(.caption)
@@ -109,11 +108,7 @@ struct StatusMenuView: View {
 
     /// Height of the scrolling content, calculated from the fixed row heights.
     private var contentHeight: CGFloat {
-        var height = serviceSectionHeight
-        if !advisoryService.topics.isEmpty {
-            height += MenuMetrics.dividerHeight + advisorySectionHeight
-        }
-        return height
+        serviceSectionHeight + MenuMetrics.dividerHeight + advisorySectionHeight
     }
 
     private var serviceSectionHeight: CGFloat {
@@ -128,15 +123,23 @@ struct StatusMenuView: View {
     }
 
     private var advisorySectionHeight: CGFloat {
-        let results = advisoryService.results
-        guard !results.isEmpty else { return MenuMetrics.sectionHeaderHeight + Self.loadingAdvisoriesHeight }
-        let rows = results.reduce(0) { total, result in
-            total + AdvisoryTopicRowView.height(for: result, isExpanded: expandedIDs.contains(result.id))
-        }
-        return MenuMetrics.sectionHeaderHeight
-            + rows
-            + CGFloat(results.count - 1) * MenuMetrics.dividerHeight
+        var height = MenuMetrics.sectionHeaderHeight
+            + GlobalIncidentRowView.height(
+                for: incidentService,
+                isExpanded: expandedIDs.contains(GlobalIncidentService.rowID)
+            )
             + MenuMetrics.listVerticalPadding
+
+        let results = advisoryService.results
+        if !results.isEmpty {
+            height += results.reduce(0) { total, result in
+                total + MenuMetrics.dividerHeight
+                    + AdvisoryTopicRowView.height(for: result, isExpanded: expandedIDs.contains(result.id))
+            }
+        } else if !advisoryService.topics.isEmpty {
+            height += Self.loadingAdvisoriesHeight
+        }
+        return height
     }
 
     private static let loadingHeight: CGFloat = 96
@@ -185,7 +188,7 @@ struct StatusMenuView: View {
                 Text("Security Advisories")
                     .font(.headline)
                 Spacer()
-                if advisoryService.isLoading {
+                if advisoryService.isLoading || incidentService.isLoading {
                     ProgressView()
                         .controlSize(.small)
                 }
@@ -193,24 +196,24 @@ struct StatusMenuView: View {
             .padding(.horizontal, 16)
             .frame(height: MenuMetrics.sectionHeaderHeight)
 
-            if advisoryService.results.isEmpty {
-                Text("Loading advisories...")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: Self.loadingAdvisoriesHeight)
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(advisoryService.results) { result in
-                        AdvisoryTopicRowView(result: result, isExpanded: isExpanded(result.id))
-                        if result.id != advisoryService.results.last?.id {
-                            Divider()
-                        }
-                    }
+            VStack(spacing: 0) {
+                GlobalIncidentRowView(service: incidentService, isExpanded: isExpanded(GlobalIncidentService.rowID))
+
+                if advisoryService.results.isEmpty && !advisoryService.topics.isEmpty {
+                    Text("Loading advisories...")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: Self.loadingAdvisoriesHeight)
                 }
-                .padding(.horizontal, 16)
-                .padding(.bottom, MenuMetrics.listVerticalPadding)
+
+                ForEach(advisoryService.results) { result in
+                    Divider()
+                    AdvisoryTopicRowView(result: result, isExpanded: isExpanded(result.id))
+                }
             }
+            .padding(.horizontal, 16)
+            .padding(.bottom, MenuMetrics.listVerticalPadding)
         }
     }
 }

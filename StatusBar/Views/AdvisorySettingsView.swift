@@ -3,6 +3,7 @@ import SwiftUI
 /// "Advisories" tab of the settings window.
 struct AdvisorySettingsView: View {
     @Bindable var advisoryService: AdvisoryPollingService
+    @Bindable var incidentService: GlobalIncidentService
     @Environment(\.colorScheme) private var colorScheme
 
     @State private var newEcosystem: AdvisoryEcosystem = .npm
@@ -160,6 +161,9 @@ struct AdvisorySettingsView: View {
                 }
                 .font(.caption)
             }
+
+            Toggle("Notify about global incidents that need attention", isOn: $incidentService.notificationsEnabled)
+                .font(.subheadline)
 
             Text("To receive these during Focus or Do Not Disturb, add StatusBar to the allowed apps of your Focus in System Settings › Focus.")
                 .font(.caption)
