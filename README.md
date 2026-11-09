@@ -17,7 +17,8 @@ StatusBar does two things:
 
 - **Menu bar icon** that changes color based on overall status (green/yellow/orange/red/gray)
 - **Five provider types** — auto-detected from URL (StatusPage, incident.io, status.io, Cachet, UptimeRobot)
-- **Expandable service rows** with component-level breakdown; long lists scroll inside the row
+- **Expandable service rows** with open incidents and a component-level breakdown; long lists scroll inside the row
+- **Open incidents count** — a service with an open incident shows at least Degraded Performance, also when the status page itself still says all systems are operational
 - **Quick links** to open status pages in your browser
 - **Native notifications** when a service status changes (degradation or recovery)
 - **Configurable polling interval** (30s to 10 minutes)
@@ -189,6 +190,7 @@ StatusBar/
     StatusMenuView.swift            — Main dropdown content
     ServiceRowView.swift            — Expandable service row
     ComponentRowView.swift          — Component status line
+    ServiceIncidentRowView.swift    — Open incident line, links to the incident
     StatusIndicatorView.swift       — Reusable colored status dot
     AdvisoryTopicRowView.swift      — Expandable advisory topic row
     AdvisoryRowView.swift           — Single advisory line with relative timestamp

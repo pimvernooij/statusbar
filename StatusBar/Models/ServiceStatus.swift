@@ -100,6 +100,8 @@ struct ServiceResult: Identifiable, Sendable {
     let statusDescription: String
     let components: [ComponentResult]
     let error: String?
+    /// Open incidents reported by the status page, shown above the components.
+    var incidents: [ServiceIncident] = []
 
     var visibleComponents: [ComponentResult] {
         components.filter { component in
@@ -117,6 +119,13 @@ struct ServiceResult: Identifiable, Sendable {
             error: message
         )
     }
+}
+
+struct ServiceIncident: Identifiable, Sendable {
+    let id: String
+    let name: String
+    let status: OverallStatus
+    let url: URL?
 }
 
 struct ComponentResult: Identifiable, Sendable {

@@ -127,6 +127,7 @@ The app supports two provider types, both JSON-based:
 - Scrolling in the dropdown: a `ScrollView` needs an explicit `.frame(height:)` or it collapses to zero, and `ViewThatFits` or `GeometryReader` measurement leaves the panel blank on macOS 26. Give rows fixed heights and calculate scroll heights with `MenuMetrics`; update the row's `height(for:isExpanded:)` when its layout changes
 - Making a window translucent with `NSWindow.alphaValue`: that also fades text and controls. Use `NSVisualEffectView` as the background
 - Not filtering group components from the StatusPage API response
+- Deriving a service's status from the page indicator or components alone: StatusPage and status.io can report "operational" during an open incident that affects no components. Open incidents count as at least degraded
 - Using `@ObservedObject`/`@StateObject` instead of the Observation framework on macOS 14+
 - Force-unwrapping URLs - use `guard let` or provide fallback
 - Not handling `Task.isCancelled` in polling loops

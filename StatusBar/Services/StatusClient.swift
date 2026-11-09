@@ -58,13 +58,31 @@ actor StatusClient {
                 )
             }
 
+            // The page indicator can stay "none" during an open incident that
+            // affects no components, so open incidents count as well.
+            let openIncidents = (summary.incidents ?? []).filter {
+                $0.status != "resolved" && $0.status != "postmortem"
+            }
+            let incidents = openIncidents.map { incident in
+                ServiceIncident(
+                    id: incident.id,
+                    name: incident.name,
+                    status: max(OverallStatus(indicator: incident.impact), .degradedPerformance),
+                    url: incident.shortlink.flatMap(URL.init(string:))
+                )
+            }
+            let incidentStatus = incidents.map(\.status).filter { $0 != .unknown }.max() ?? .operational
+            let indicatorStatus = OverallStatus(indicator: summary.status.indicator)
+            let status = indicatorStatus == .unknown ? indicatorStatus : max(indicatorStatus, incidentStatus)
+
             return ServiceResult(
                 id: service.id,
                 service: service,
-                status: OverallStatus(indicator: summary.status.indicator),
-                statusDescription: summary.status.description,
+                status: status,
+                statusDescription: openIncidents.first?.name ?? summary.status.description,
                 components: components,
-                error: nil
+                error: nil,
+                incidents: incidents
             )
         } catch is CancellationError {
             return .error(service: service, message: "Request cancelled")
@@ -157,7 +175,10 @@ actor StatusClient {
                 status: overallStatus,
                 statusDescription: description,
                 components: components,
-                error: nil
+                error: nil,
+                incidents: summary.ongoingIncidents.map {
+                    ServiceIncident(id: $0.id, name: $0.name, status: .degradedPerformance, url: nil)
+                }
             )
         } catch is CancellationError {
             return .error(service: service, message: "Request cancelled")
@@ -244,7 +265,12 @@ actor StatusClient {
                 }
             }
 
-            let overallStatus = OverallStatus(statusIOCode: result.statusOverall.statusCode)
+            // status.io lists only active incidents; the overall code can stay
+            // operational when an incident affects no containers.
+            let reportedStatus = OverallStatus(statusIOCode: result.statusOverall.statusCode)
+            let overallStatus = result.incidents.isEmpty || reportedStatus == .unknown
+                ? reportedStatus
+                : max(reportedStatus, .degradedPerformance)
 
             let description: String
             if let incident = result.incidents.first {
@@ -261,7 +287,10 @@ actor StatusClient {
                 status: overallStatus,
                 statusDescription: description,
                 components: components,
-                error: nil
+                error: nil,
+                incidents: result.incidents.enumerated().map { index, incident in
+                    ServiceIncident(id: "\(index)-\(incident.name)", name: incident.name, status: .degradedPerformance, url: nil)
+                }
             )
         } catch is CancellationError {
             return .error(service: service, message: "Request cancelled")

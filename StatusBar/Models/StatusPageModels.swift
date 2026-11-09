@@ -6,6 +6,17 @@ struct StatusPageSummary: Codable, Sendable {
     let page: StatusPageInfo
     let status: StatusPageStatus
     let components: [StatusPageComponent]
+    /// Unresolved incidents. Optional so pages that omit the field still decode.
+    let incidents: [StatusPageIncident]?
+}
+
+struct StatusPageIncident: Codable, Sendable {
+    let id: String
+    let name: String
+    let shortlink: String?
+    let status: String
+    /// `none`, `minor`, `major` or `critical`
+    let impact: String
 }
 
 struct StatusPageInfo: Codable, Sendable {
