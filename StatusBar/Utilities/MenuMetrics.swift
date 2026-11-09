@@ -7,6 +7,8 @@ enum MenuMetrics {
     static let serviceRowHeight: CGFloat = 36
     static let topicRowHeight: CGFloat = 44
     static let componentRowHeight: CGFloat = 18
+    /// Fits an incident title of up to two lines.
+    static let incidentRowHeight: CGFloat = 34
     static let advisoryRowHeight: CGFloat = 36
     static let linkRowHeight: CGFloat = 24
     static let sectionHeaderHeight: CGFloat = 36

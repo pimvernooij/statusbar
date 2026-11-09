@@ -8,6 +8,7 @@ struct ServiceRowView: View {
     static func height(for result: ServiceResult, isExpanded: Bool) -> CGFloat {
         guard isExpanded else { return MenuMetrics.serviceRowHeight }
         return MenuMetrics.serviceRowHeight
+            + CGFloat(result.incidents.count) * MenuMetrics.incidentRowHeight
             + listHeight(for: result)
             + (result.service.pageURL == nil ? 0 : MenuMetrics.linkRowHeight)
     }
@@ -29,6 +30,11 @@ struct ServiceRowView: View {
                 }
 
             if isExpanded {
+                ForEach(result.incidents) { incident in
+                    ServiceIncidentRowView(incident: incident)
+                        .frame(height: MenuMetrics.incidentRowHeight, alignment: .top)
+                }
+
                 componentList
                     .frame(height: Self.listHeight(for: result))
 
