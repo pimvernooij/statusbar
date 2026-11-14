@@ -1,5 +1,11 @@
 # statusbar
 
+## 1.6.2
+
+### Patch Changes
+
+- 37993b9: New app icon: a shield with a pulse line, covering both service status and security.
+
 ## 1.6.1
 
 ### Patch Changes
