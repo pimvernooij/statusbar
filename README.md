@@ -1,3 +1,5 @@
+<img src="assets/icon.svg" width="96" alt="StatusBar icon">
+
 # StatusBar
 
 A lightweight macOS menu bar app that keeps an eye on the services and packages you depend on: cloud service status pages and security advisories (CVEs) for the ecosystems you follow.
