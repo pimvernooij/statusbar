@@ -116,6 +116,10 @@ The app supports two provider types, both JSON-based:
 - `pnpm-workspace.yaml` sets `minimumReleaseAge` to 7 days: pnpm refuses package versions younger than that, also when they are already in the lockfile. Dependabot uses the same 7-day `cooldown`.
 - Changesets/release tooling is the only npm dependency; the app itself has none.
 
+### App Icon
+
+- The source is `assets/icon.svg` (1024×1024, icon shape inset 100px). After changing it, regenerate the icon set with `swift scripts/render-icon.swift assets/icon.svg StatusBar/Assets.xcassets/AppIcon.appiconset`.
+
 ### Documentation
 
 - Always update `README.md` when making significant changes (new features, renamed files, architecture changes). Keep the Features list, Architecture section, and Project Structure tree in sync with the codebase.
