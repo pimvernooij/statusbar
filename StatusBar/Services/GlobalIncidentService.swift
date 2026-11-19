@@ -17,8 +17,8 @@ final class GlobalIncidentService {
         didSet { UserDefaults.standard.set(notificationsEnabled, forKey: Self.notificationsEnabledKey) }
     }
 
-    var attentionCount: Int {
-        incidents.filter(\.needsAttention).count
+    var recentCount: Int {
+        incidents.filter(\.isRecent).count
     }
 
     private let client = GlobalIncidentClient()
@@ -83,7 +83,8 @@ final class GlobalIncidentService {
         }
 
         if isSeeded && notificationsEnabled {
-            unseen.filter(\.needsAttention).forEach(notify)
+            // Only recent ones, so a change in the feed's links can't replay old briefings
+            unseen.filter(\.isRecent).forEach(notify)
         }
         isSeeded = true
 
@@ -100,7 +101,7 @@ final class GlobalIncidentService {
     private func notify(_ incident: GlobalIncident) {
         let content = UNMutableNotificationContent()
         content.title = incident.title
-        content.subtitle = "Global incident · \(incident.category)"
+        content.subtitle = "Global incident"
         content.body = incident.summary
         content.sound = .default
         content.interruptionLevel = .timeSensitive

@@ -90,8 +90,8 @@ The app supports two provider types, both JSON-based:
 
 ### Global Incidents (Cloudflare Radar Zero Wire)
 
-- Feed: `https://radar.cloudflare.com/security/zero-wire/rss` (RSS 2.0, public, `Cache-Control: max-age=300`). Shown in the UI as "Global incidents · powered by Cloudflare"; don't use the name Zero Wire in the UI.
-- Each item has several `<category>` elements: the first is the status (`Needs attention` or `Reference`), the rest are tags (CVE IDs, technologies).
+- Feed: `https://radar.cloudflare.com/zero-wire/rss` (RSS 2.0, public, `Cache-Control: max-age=300`). Shown in the UI as "Global incidents · powered by Cloudflare"; don't use the name Zero Wire in the UI.
+- The feed has no urgency field (Cloudflare removed the `Needs attention`/`Reference` status category in November 2026); `<category>` elements are only tags. Recency is used instead: briefings from the last 7 days (`GlobalIncident.recentDays`) are highlighted, and only those notify.
 - `guid` contains a date (`node2shell@2026-10-25`) and may change when a briefing is updated, so the item link is used as the ID for seen tracking.
 - Parse with Foundation's `XMLParser` (`RSSFeedParser`); no dependencies.
 

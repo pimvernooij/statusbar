@@ -36,9 +36,9 @@ StatusBar does two things:
 
 ### Global incidents
 
-- **Large, widespread incidents** such as runtime RCEs (Node.js, PHP), compromised certificate authorities and kernel bugs, which package advisories don't cover. Powered by [Cloudflare Radar Zero Wire](https://radar.cloudflare.com/security/zero-wire)
-- Briefings from the last 30 days, the ones that need attention first, each with its recommended action (e.g. "Prioritize patching.")
-- **Prioritized notification** when a new briefing needs attention; can be turned off in **Settings → Advisories**
+- **Large, widespread incidents** such as runtime RCEs (Node.js, PHP), compromised certificate authorities and kernel bugs, which package advisories don't cover. Powered by [Cloudflare Radar Zero Wire](https://radar.cloudflare.com/zero-wire)
+- Briefings from the last 30 days, newest first, each with its recommended action (e.g. "Prioritize patching."); the row turns orange when one was published in the last 7 days
+- **Prioritized notification** for every new briefing; can be turned off in **Settings → Advisories**
 
 ### General
 
@@ -139,10 +139,10 @@ Advisory notifications use the Time Sensitive interruption level. macOS only hon
 
 ## Global Incidents
 
-The first row of the **Security Advisories** section, **Global incidents**, lists briefings from Cloudflare Radar's [Zero Wire](https://radar.cloudflare.com/security/zero-wire) feed: urgent vulnerabilities and threats with a broad impact, published a few times a month. They cover what package advisories miss, such as a vulnerable runtime or a compromised certificate authority.
+The first row of the **Security Advisories** section, **Global incidents**, lists briefings from Cloudflare Radar's [Zero Wire](https://radar.cloudflare.com/zero-wire) feed: urgent vulnerabilities and threats with a broad impact, published a few times a month. They cover what package advisories miss, such as a vulnerable runtime or a compromised certificate authority.
 
-- Data comes from the public RSS feed `https://radar.cloudflare.com/security/zero-wire/rss`, checked every 30 minutes.
-- Each briefing has a status (**Needs attention** or **Reference**). New briefings that need attention trigger a Time Sensitive notification; briefings present when the app first loads the feed don't.
+- Data comes from the public RSS feed `https://radar.cloudflare.com/zero-wire/rss`, checked every 30 minutes.
+- The feed carries no urgency level, so recency is used: briefings from the last 7 days are marked orange and counted in the row. Every new briefing triggers a Time Sensitive notification; briefings present when the app first loads the feed don't.
 
 ## Updates
 

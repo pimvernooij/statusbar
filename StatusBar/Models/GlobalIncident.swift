@@ -7,15 +7,18 @@ struct GlobalIncident: Identifiable, Sendable {
     let id: String
     let title: String
     let summary: String
-    /// Status of the briefing: "Needs attention" or "Reference".
-    let category: String
-    /// Remaining feed categories, such as CVE IDs and affected technologies.
+    /// Feed categories, such as affected technologies and vulnerability types.
     let tags: [String]
     let publishedAt: Date
     let url: URL?
 
-    var needsAttention: Bool {
-        category.caseInsensitiveCompare("Needs attention") == .orderedSame
+    /// Briefings published within this many days count as recent.
+    static let recentDays = 7
+
+    /// The feed has no urgency field, so recency decides what is highlighted
+    /// and notified: every briefing covers an urgent, widespread threat.
+    var isRecent: Bool {
+        publishedAt >= Date.now.addingTimeInterval(-Double(Self.recentDays) * 86_400)
     }
 
     /// The recommended action, which each summary starts with, e.g. "Prioritize patching."

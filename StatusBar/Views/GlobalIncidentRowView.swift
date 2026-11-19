@@ -107,17 +107,17 @@ struct GlobalIncidentRowView: View {
 
     private var summaryText: String {
         guard service.hasLoaded else { return "" }
-        let count = service.attentionCount
-        return count == 0 ? "None urgent" : "\(count) need\(count == 1 ? "s" : "") attention"
+        let count = service.recentCount
+        return count == 0 ? "None recent" : "\(count) in last \(GlobalIncident.recentDays) days"
     }
 
     private var iconName: String {
         if service.error != nil { return "questionmark.circle" }
-        return service.attentionCount > 0 ? "exclamationmark.triangle.fill" : "globe"
+        return service.recentCount > 0 ? "exclamationmark.triangle.fill" : "globe"
     }
 
     private var iconColor: Color {
         if service.error != nil { return .gray }
-        return service.attentionCount > 0 ? .orange : .green
+        return service.recentCount > 0 ? .orange : .green
     }
 }
