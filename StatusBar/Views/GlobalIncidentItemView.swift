@@ -10,12 +10,10 @@ struct GlobalIncidentItemView: View {
             }
         } label: {
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text(incident.needsAttention ? "ATTENTION" : incident.category.uppercased())
-                    .font(.system(size: 8, weight: .bold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 1)
-                    .background(incident.needsAttention ? Color.orange : Color.gray, in: RoundedRectangle(cornerRadius: 3))
+                Circle()
+                    .fill(incident.isRecent ? Color.orange : Color.gray.opacity(0.5))
+                    .frame(width: 7, height: 7)
+                    .alignmentGuide(.firstTextBaseline) { $0[.bottom] + 1 }
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(incident.title)

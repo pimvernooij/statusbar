@@ -162,7 +162,7 @@ struct AdvisorySettingsView: View {
                 .font(.caption)
             }
 
-            Toggle("Notify about global incidents that need attention", isOn: $incidentService.notificationsEnabled)
+            Toggle("Notify about new global incidents", isOn: $incidentService.notificationsEnabled)
                 .font(.subheadline)
 
             Text("To receive these during Focus or Do Not Disturb, add StatusBar to the allowed apps of your Focus in System Settings › Focus.")

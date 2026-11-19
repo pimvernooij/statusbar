@@ -17,8 +17,8 @@ enum GlobalIncidentClientError: LocalizedError {
 /// Reads Cloudflare Radar's Zero Wire RSS feed of urgent, widespread incidents.
 /// The feed is public and cached for 5 minutes by Cloudflare.
 actor GlobalIncidentClient {
-    static let feedURL = URL(string: "https://radar.cloudflare.com/security/zero-wire/rss")
-    static let pageURL = URL(string: "https://radar.cloudflare.com/security/zero-wire")
+    static let feedURL = URL(string: "https://radar.cloudflare.com/zero-wire/rss")
+    static let pageURL = URL(string: "https://radar.cloudflare.com/zero-wire")
     /// How far back briefings are listed.
     static let lookbackDays = 30
 
@@ -31,7 +31,7 @@ actor GlobalIncidentClient {
         self.session = URLSession(configuration: config)
     }
 
-    /// Recent briefings: items that need attention first, newest first within each group.
+    /// Briefings from the lookback window, newest first.
     func fetchIncidents() async throws -> [GlobalIncident] {
         guard let url = Self.feedURL else { throw GlobalIncidentClientError.invalidResponse }
 
@@ -50,21 +50,17 @@ actor GlobalIncidentClient {
         return items
             .compactMap(Self.incident)
             .filter { $0.publishedAt >= cutoff }
-            .sorted {
-                $0.needsAttention != $1.needsAttention ? $0.needsAttention : $0.publishedAt > $1.publishedAt
-            }
+            .sorted { $0.publishedAt > $1.publishedAt }
     }
 
     private static func incident(from item: RSSItem) -> GlobalIncident? {
         let id = item.link.isEmpty ? item.guid : item.link
         guard !id.isEmpty, !item.title.isEmpty, let date = parseDate(item.pubDate) else { return nil }
-        // The first category is the briefing's status; the rest are tags
         return GlobalIncident(
             id: id,
             title: item.title,
             summary: item.description,
-            category: item.categories.first ?? "",
-            tags: Array(item.categories.dropFirst()),
+            tags: item.categories,
             publishedAt: date,
             url: URL(string: item.link)
         )
